@@ -1,0 +1,87 @@
+{
+  "name": "generator-molecule-lxd-role",
+  "version": "0.0.0",
+  "description": "Ansible role testing with molecule using LXD instead of Docker",
+  "homepage": "",
+  "author": {
+    "name": "coaxial",
+    "email": "hi@64b.it",
+    "url": "https://64b.it"
+  },
+  "files": [
+    "generators"
+  ],
+  "main": "generators/index.js",
+  "keywords": [
+    "ansible",
+    "molecule",
+    "role",
+    "lxd",
+    "testing",
+    "yeoman-generator"
+  ],
+  "devDependencies": {
+    "coveralls": "^3.0.0",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-xo": "^0.20.1",
+    "eslint-plugin-prettier": "^2.6.0",
+    "husky": "^0.14.3",
+    "jest": "^22.0.6",
+    "lint-staged": "^6.1.1",
+    "nsp": "^2.8.0",
+    "prettier": "^1.11.1",
+    "yeoman-assert": "^3.1.0",
+    "yeoman-test": "^1.8.0"
+  },
+  "engines": {
+    "npm": ">= 4.0.0"
+  },
+  "dependencies": {
+    "inquirer": "^6.0.0",
+    "yeoman-generator": "^2.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "scripts": {
+    "prepublishOnly": "nsp check",
+    "pretest": "eslint .",
+    "precommit": "lint-staged",
+    "test": "jest"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "xo",
+      "prettier"
+    ],
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "printWidth": 90
+        }
+      ]
+    },
+    "plugins": [
+      "prettier"
+    ]
+  },
+  "repository": "coaxial/generator-molecule-lxd-role",
+  "license": "BSD-3-Clause"
+}
