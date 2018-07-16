@@ -74,7 +74,8 @@
         "error",
         {
           "singleQuote": true,
-          "printWidth": 90
+          "printWidth": 90,
+          "trailingComma": "all"
         }
       ]
     },
