@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`helpers #choicesFor returns the requested distros 1`] = `
+Array [
+  Array [
+    Separator {
+      "line": "[2m== ubuntu ==[22m",
+      "type": "separator",
+    },
+    Object {
+      "name": "All LTS",
+      "value": Array [
+        Object {
+          "codeName": "trusty",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "14.04",
+        },
+        Object {
+          "codeName": "xenial",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "16.04",
+        },
+        Object {
+          "codeName": "bionic",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "18.04",
+        },
+      ],
+    },
+    Object {
+      "name": "All current and future",
+      "value": Array [
+        Object {
+          "codeName": "trusty",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "14.04",
+        },
+        Object {
+          "codeName": "xenial",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "16.04",
+        },
+        Object {
+          "codeName": "bionic",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "lts",
+            "current",
+          ],
+          "versionNumber": "18.04",
+        },
+        Object {
+          "codeName": "cosmic",
+          "distribution": "ubuntu",
+          "family": "debian",
+          "tags": Array [
+            "future",
+          ],
+          "versionNumber": "18.10",
+        },
+      ],
+    },
+    Object {
+      "name": "trusty",
+      "value": Object {
+        "codeName": "trusty",
+        "distribution": "ubuntu",
+        "family": "debian",
+        "versionNumber": "14.04",
+      },
+    },
+    Object {
+      "name": "xenial",
+      "value": Object {
+        "codeName": "xenial",
+        "distribution": "ubuntu",
+        "family": "debian",
+        "versionNumber": "16.04",
+      },
+    },
+    Object {
+      "name": "bionic",
+      "value": Object {
+        "codeName": "bionic",
+        "distribution": "ubuntu",
+        "family": "debian",
+        "versionNumber": "18.04",
+      },
+    },
+    Object {
+      "name": "cosmic",
+      "value": Object {
+        "codeName": "cosmic",
+        "distribution": "ubuntu",
+        "family": "debian",
+        "versionNumber": "18.10",
+      },
+    },
+  ],
+]
+`;

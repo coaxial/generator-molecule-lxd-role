@@ -1,6 +1,6 @@
 const { Separator } = require('inquirer');
 const {
-  __,
+  concat,
   contains,
   curry,
   filter,
@@ -8,57 +8,57 @@ const {
   or,
   pick,
   prop,
-  toUpper
+  toUpper,
 } = require('ramda');
 
 const { PLATFORMS } = require('./constants');
 
 const tagsProp = prop('tags');
 
+// Versions have tags to define whether they're LTS etc, we can use the tests to filter them out into separate lists.
+// Tests
+//
+// const isLts = curry(version =>
+  // or(contains('lts', tagsProp(version)), contains('stable', tagsProp(version))),
+// );
+// const isCurrentOrFuture = curry(version =>
+//   or(contains('current', tagsProp(version)), contains('future', tagsProp(version))),
+// );
 const isLts = curry(version => contains('lts', tagsProp(version)));
-const isCurrentOrFuture = curry(version => or(contains('current', tagsProp(version)), contains('future', tagsProp(version))))
+const isStable = curry(version => contains('stable', tagsProp(version)));
+const isCurrent = curry(version => contains('stable', tagsProp(version)));
+const isFuture = curry(version => contains('stable', tagsProp(version)));
+// Lists
 const ltsOnly = filter(isLts);
 const currentAndFuture = filter(isCurrentOrFuture);
-const choicesValues = map(__, distro => ({
-  name: distro.codeName,
-  value: pick(['family', 'distribution', 'codeName', 'version']),
+const all = map(version => ({
+  name: or(version.codeName, version.versionNumber),
+  value: pick(['family', 'distribution', 'codeName', 'versionNumber'], version),
 }));
+
 const buildChoiceCategory = distroName => {
+  // A choice category has a separator, then pre-defined groups of
+  // versions (lts, current + future), and finally every version to
+  // be picked individually.
   const versions = PLATFORMS[`${toUpper(distroName)}`];
-  // const tagProp = prop('tags')
-  // const isIncluded = curry(distro => contains('lts', tagProp(distro)))
-  // const ltsonly = filter(isIncluded, versions)
-  // console.log(ltsonly)
-  // const ltsonly = filter(contains('lts', tagProp(__)))
-  // console.log(map(tagProp, versions))
-  // console.log(versions);
-  // console.log(filter(prop('tags'), versions));
-  // console.log(map(filter(prop('tags')), versions))
-  // console.log({tags: tagsProp(PLATFORMS[`${toUpper(distroName)}`])})
-  console.log(ltsOnly(versions));
-  console.log(currentAndFuture(versions));
-  return [
-    new Separator(`== ${distroName} ==`),
-    {
-      name: 'All LTS',
-      value: ltsOnly(versions),
-      // value: filter(isLts, PLATFORMS[`${toUpper(distroName)}`]),
-    },
-    {
-      name: 'All current and future',
-      value: currentAndFuture(versions),
-      // value: filter(or(isCurrent, isFuture), PLATFORMS[`${toUpper(distroName)}`]),
-    },
-    // unnest(
-    //   map(choicesValues, filterDistro(distroName, versions)),
-    // ),
-  ];
+  const separator = new Separator(`== ${distroName} ==`);
+  const allLtsChoice = {
+    name: 'All LTS',
+    value: ltsOnly(versions),
+  };
+  const allCurrentAndFutureChoice = {
+    name: 'All current and future',
+    value: currentAndFuture(versions),
+  };
+  const groupsChoice = [allLtsChoice, allCurrentAndFutureChoice];
+  const individualChoice = all(versions);
+  const allChoices = concat(groupsChoice, individualChoice);
+  const choiceCategory = concat([separator], allChoices);
+
+  return choiceCategory;
 };
 
 // Public methods
-// const choicesFor = curry(distroName =>
-//   concat(unnest(map(distroName, buildChoiceCategory))),
-// );
 const choicesFor = map(buildChoiceCategory);
 
 module.exports = {
