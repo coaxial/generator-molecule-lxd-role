@@ -1,9 +1,10 @@
 'use strict';
+const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 
-const { ANSIBLE_VERSIONS, LICENSES } = require('../constants');
-const { choicesFor } = require('../helpers');
+const { ANSIBLE_VERSIONS, LICENSES, URLS } = require('../constants');
+const { choicesFor, parseDeps } = require('../helpers');
 
 module.exports = class extends Generator {
   prompting() {
@@ -14,14 +15,33 @@ module.exports = class extends Generator {
     const prompts = [
       {
         type: 'input',
+        name: 'roleName',
+        message: "What is the new role's name?",
+      },
+      {
+        type: 'confirm',
+        name: 'repoNameDiffers',
+        message: "Use a different name for the role's directory?",
+        default: true,
+        store: true,
+      },
+      {
+        when: answers => answers.repoNameDiffers,
+        type: 'input',
+        name: 'repoName',
+        message: "What will be the role's directory name?",
+        default: answers => `ansible-role-${paramCase(answers.roleName)}`,
+      },
+      {
+        type: 'input',
         name: 'authorName',
-        message: "Who is this role's author?",
+        message: "Who is this role's author (full name or nickname)?",
         store: true,
       },
       {
         type: 'input',
-        name: 'authorCompany',
-        message: `Which company is this role published under? ${chalk.reset.gray.italic(
+        name: 'authorOrganization',
+        message: `Which organization is this role published under? ${chalk.reset.gray.italic(
           '(optional)',
         )}`,
         store: true,
@@ -37,7 +57,9 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'roleDesc',
-        message: "How would you describe this role's purpose in a few words?",
+        message: `How would you describe this role's purpose in a few words? ${chalk.reset.gray.italic(
+          'Markdown supported.',
+        )}`,
       },
       {
         type: 'list',
@@ -50,21 +72,33 @@ module.exports = class extends Generator {
       {
         type: 'checkbox',
         name: 'supportedPlatforms',
-        message: 'Which platform does this role target?',
+        message: `Which platform does this role target? ${chalk.reset.gray.italic(
+          'Is your favourite platform missing? Let us know here: ' +
+            URLS.MISSING_PLATFORM,
+        )}`,
         choices: choicesFor(['ubuntu', 'debian']),
         store: true,
       },
       {
         type: 'confirm',
-        name: 'travisEnable',
+        name: 'useTravis',
         message: 'Use Travis CI?',
         default: true,
         store: true,
       },
       {
+        when: answers => answers.useTravis,
+        type: 'input',
+        name: 'travisUsername',
+        message: 'What is your Travis CI username?',
+        store: true,
+      },
+      {
         type: 'list',
         name: 'license',
-        message: 'Which license for this role?',
+        message: `Which license for this role? ${chalk.reset.gray.italic(
+          'For help choosing, see ' + URLS.LICENSE_INFO,
+        )}`,
         choices: LICENSES,
         default: 'MIT',
         store: true,
@@ -77,11 +111,33 @@ module.exports = class extends Generator {
         )}`,
       },
       {
+        type: 'confirm',
+        name: 'hasReqs',
+        message: 'Does this role have any particular requirements?',
+        default: false,
+      },
+      {
+        when: answers => answers.hasReqs,
         type: 'editor',
-        name: 'galaxyDeps',
-        message: `Which other roles (if any) does this role depend on? ${chalk.reset.gray.italic(
-          '(optional; leave blank if none)',
+        name: 'roleReqs',
+        message: `Enter this role's requirements. ${chalk.reset.gray.italic(
+          'Usually details specific OS requirements, assumptions, etc. Markdown valid here.',
         )}`,
+      },
+      {
+        type: 'confirm',
+        name: 'hasDeps',
+        message: 'Does this role depend on any other?',
+        default: false,
+      },
+      {
+        when: answers => answers.hasDeps,
+        type: 'editor',
+        name: 'roleDeps',
+        message:
+          'Enter the roles on which your role will depend. See ' +
+          URLS.DEPENDENCIES_FORMAT +
+          " for how to format your entries, they'll be inserted verbatim into a requirements.yml file.",
       },
     ];
 
@@ -92,9 +148,21 @@ module.exports = class extends Generator {
 
   writing() {
     this.fs.copyTpl(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt'),
-      { dummyVar: 'heyo' },
+      this.templatePath('README.md.ejs'),
+      this.destinationPath(`${this.props.repoName}/README.md`),
+      {
+        roleName: this.props.roleName,
+        roleDesc: this.props.roleDesc,
+        hasDeps: this.props.hasDeps,
+        roleDeps: parseDeps(this.props.roleDeps),
+        hasReqs: this.props.hasReqs,
+        roleReqs: this.props.roleReqs,
+        roleNameExample: paramCase(this.props.roleName),
+        license: this.props.license,
+        authorName: this.props.authorName,
+        authorOrganization: this.props.authorOrganization,
+        authorWebsite: this.props.authorWebsite,
+      },
     );
   }
 

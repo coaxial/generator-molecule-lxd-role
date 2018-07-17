@@ -1,0 +1,48 @@
+<%- roleName %>
+=========
+[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+
+<%- roleDesc %>
+
+<% if(hasReqs) { -%>
+Requirements
+------------
+
+<%- roleReqs %>
+
+<% } -%>
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+`example_variable` | `true` | `true` or `false` | This is an example to populate the table.
+
+<% if(hasDeps) { -%>
+Dependencies
+------------
+
+<% roleDeps.forEach(dep => { -%>
+<%- `- ${dep}` %>
+<% }); -%>
+<% } -%>
+
+Example Playbook
+----------------
+
+```yaml
+- hosts: all
+  roles:
+<%  -%>
+    - <%- roleNameExample %>
+```
+
+License
+-------
+
+<%- license %>
+
+Author Information
+------------------
+
+<%- `${authorName} ([${authorOrganization}](${authorWebsite}))` -%>

@@ -90,8 +90,15 @@ const LICENSES = [
   'Eclipse Public License',
 ];
 
+const URLS = {
+  MISSING_PLATFORM: 'https://v.gd/fihumo',
+  LICENSE_INFO: 'https://v.gd/afifeg',
+  DEPENDENCIES_FORMAT: 'https://v.gd/hohufa',
+};
+
 module.exports = {
   ANSIBLE_VERSIONS,
   LICENSES,
   PLATFORMS,
+  URLS,
 };

@@ -11,12 +11,14 @@ const {
   juxt,
   map,
   or,
+  path,
   pick,
   prop,
   tail,
   toUpper,
   unnest,
 } = require('ramda');
+const jsyaml = require('js-yaml');
 
 const { PLATFORMS } = require('./constants');
 
@@ -62,10 +64,14 @@ const buildChoiceCategory = distroName => {
   return choiceCategory;
 };
 
+const selectRoleOrName = map(dep => or(path(['name'], dep), path(['src'], dep)));
+
 // Public methods
 const choicesFor = compose(unnest, map(buildChoiceCategory));
+const parseDeps = compose(selectRoleOrName, jsyaml.load);
 
 module.exports = {
   choicesFor,
   capitalize,
+  parseDeps,
 };
