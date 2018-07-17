@@ -1,5 +1,6 @@
 'use strict';
 const Generator = require('yeoman-generator');
+const chalk = require('chalk');
 
 const { ANSIBLE_VERSIONS, LICENSES } = require('../constants');
 const { choicesFor } = require('../helpers');
@@ -20,13 +21,17 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'authorCompany',
-        message: 'Which company is this role published under? (optional)',
+        message: `Which company is this role published under? ${chalk.reset.gray.italic(
+          '(optional)',
+        )}`,
         store: true,
       },
       {
         type: 'input',
         name: 'authorWebsite',
-        message: 'What is the website for the company/author of this role? (optional)',
+        message: `What is the website for the company/author of this role? ${chalk.reset.gray.italic(
+          '(optional)',
+        )}`,
         store: true,
       },
       {
@@ -67,13 +72,16 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'galaxyTags',
-        message: 'Which Galaxy tags to give the role? (single words, comma separated)',
+        message: `Which Galaxy tags to give the role? ${chalk.reset.gray.italic(
+          '(optional; single words, comma separated)',
+        )}`,
       },
       {
         type: 'editor',
         name: 'galaxyDeps',
-        message:
-          'Which other roles (if any) does this role depend on? Leave blank if none.',
+        message: `Which other roles (if any) does this role depend on? ${chalk.reset.gray.italic(
+          '(optional; leave blank if none)',
+        )}`,
       },
     ];
 

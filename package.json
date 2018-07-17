@@ -1,16 +1,15 @@
 {
   "name": "generator-molecule-lxd-role",
   "version": "0.0.0",
-  "description": "Ansible role testing with molecule using LXD instead of Docker",
+  "description":
+    "Ansible role testing with molecule using LXD instead of Docker",
   "homepage": "",
   "author": {
     "name": "coaxial",
     "email": "hi@64b.it",
     "url": "https://64b.it"
   },
-  "files": [
-    "generators"
-  ],
+  "files": ["generators"],
   "main": "generators/index.js",
   "keywords": [
     "ansible",
@@ -38,6 +37,7 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
+    "chalk": "^2.4.1",
     "inquirer": "^6.0.0",
     "ramda": "^0.25.0",
     "yeoman-generator": "^2.0.1"
@@ -52,20 +52,11 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"],
+    "*.json": ["prettier --write", "git add"]
   },
   "eslintConfig": {
-    "extends": [
-      "xo",
-      "prettier"
-    ],
+    "extends": ["xo", "prettier"],
     "env": {
       "jest": true,
       "node": true
@@ -80,9 +71,7 @@
         }
       ]
     },
-    "plugins": [
-      "prettier"
-    ]
+    "plugins": ["prettier"]
   },
   "repository": "coaxial/generator-molecule-lxd-role",
   "license": "BSD-3-Clause"
