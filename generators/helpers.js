@@ -1,3 +1,4 @@
+'use strict';
 const { Separator } = require('inquirer');
 const {
   compose,
@@ -14,12 +15,13 @@ const {
   prop,
   tail,
   toUpper,
+  unnest,
 } = require('ramda');
 
 const { PLATFORMS } = require('./constants');
 
 // Utilities
-const titleize = compose(join(''), juxt([compose(toUpper, head), tail]));
+const capitalize = compose(join(''), juxt([compose(toUpper, head), tail]));
 
 // Tests
 // Versions have tags to define whether they're LTS etc, we can use the tests to filter them out into separate lists.
@@ -33,7 +35,7 @@ const lts = filter(isLts);
 const current = filter(isCurrent);
 const future = filter(isFuture);
 const all = map(version => ({
-  name: or(version.codeName, version.versionNumber),
+  name: or(capitalize(version.codeName), capitalize(version.versionNumber)),
   value: pick(['family', 'distribution', 'codeName', 'versionNumber'], version),
 }));
 
@@ -43,13 +45,13 @@ const buildChoiceCategory = distroName => {
   // versions (lts, current + future), and finally every version to
   // be picked individually.
   const versions = PLATFORMS[`${toUpper(distroName)}`];
-  const separator = new Separator(`↓  ${titleize(distroName)} ↓ `);
+  const separator = new Separator(`↓  ${capitalize(distroName)} ↓ `);
   const allLtsChoice = {
-    name: 'All LTS',
+    name: `All LTS (${capitalize(distroName)})`,
     value: lts(versions),
   };
   const allCurrentAndFutureChoice = {
-    name: 'All current and future',
+    name: `All current and future (${capitalize(distroName)})`,
     value: concat(current(versions), future(versions)),
   };
   const groupsChoice = [allLtsChoice, allCurrentAndFutureChoice];
@@ -61,9 +63,9 @@ const buildChoiceCategory = distroName => {
 };
 
 // Public methods
-const choicesFor = map(buildChoiceCategory);
+const choicesFor = compose(unnest, map(buildChoiceCategory));
 
 module.exports = {
   choicesFor,
-  titleize,
+  capitalize,
 };

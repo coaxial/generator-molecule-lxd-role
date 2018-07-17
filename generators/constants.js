@@ -76,7 +76,22 @@ const ANSIBLE_VERSIONS = [
   '2.6',
 ];
 
+const LICENSES = [
+  '0BSD',
+  'Apache 2.0',
+  'BSD-3-Clause (a.k.a. New or Revised)',
+  'BSD-2-Clause (a.k.a. Simplified or FreeBSD)',
+  'GPL',
+  'ISC',
+  'LGPL (a.k.a. Library or Lesser GPL)',
+  'MIT',
+  'Mozilla Pulic License 2.0',
+  'Common Development and Distribution License',
+  'Eclipse Public License',
+];
+
 module.exports = {
-  PLATFORMS,
   ANSIBLE_VERSIONS,
+  LICENSES,
+  PLATFORMS,
 };
