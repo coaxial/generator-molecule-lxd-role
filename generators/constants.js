@@ -35,38 +35,28 @@ const PLATFORMS = {
       distribution: 'debian',
       codeName: 'jessie',
       versionNumber: '8',
-      tags: ['oldstable'],
+      tags: ['current'],
     },
     {
       family: 'debian',
       distribution: 'debian',
       codeName: 'stretch',
       versionNumber: '9',
-      tags: ['stable'],
+      tags: ['lts'],
     },
     {
       family: 'debian',
       distribution: 'debian',
       codeName: 'buster',
       versionNumber: 'testing',
+      tags: ['future'],
     },
     {
       family: 'debian',
       distribution: 'debian',
       codeName: 'sid',
       versionNumber: 'unstable',
-    },
-  ],
-  CENTOS: [
-    {
-      family: 'redhat',
-      distribution: 'centos',
-      versionNumber: '7',
-    },
-    {
-      family: 'redhat',
-      distribution: 'centos',
-      versionNumber: '6',
+      tags: ['future'],
     },
   ],
 };
