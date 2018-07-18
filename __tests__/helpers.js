@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('yeoman-assert');
 
-const { capitalize, choicesFor } = require('../generators/helpers');
+const { capitalize, choicesFor, parseDeps } = require('../generators/helpers');
 
 describe('helpers', () => {
   describe('#choicesFor', () => {
@@ -25,6 +25,33 @@ describe('helpers', () => {
       const actual = capitalize('hello');
 
       assert.equal(actual, expected);
+    });
+  });
+
+  describe('#parseDeps', () => {
+    describe('when there is a name', () => {
+      const testDeps =
+        '- name: username.myrole\n  src: https://bithub.com/username/myrole.git';
+
+      it('uses the name', () => {
+        const expected = ['username.myrole'];
+
+        const actual = parseDeps(testDeps);
+
+        assert.deepStrictEqual(actual, expected);
+      });
+    });
+
+    describe('when there is no name', () => {
+      const testDeps = '- src: https://bithub.com/username/role-name.git';
+
+      it('builds a name from the URL', () => {
+        const expected = ['role-name'];
+
+        const actual = parseDeps(testDeps);
+
+        assert.deepStrictEqual(actual, expected);
+      });
     });
   });
 });

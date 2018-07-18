@@ -53,7 +53,7 @@ describe('generator-molecule-lxd-role:app', () => {
       .withPrompts(testResponses);
   });
 
-  describe('creates files', () => {
+  describe('generated files', () => {
     describe('README.md', () => {
       const filePath = 'README.md';
 
@@ -71,7 +71,7 @@ describe('generator-molecule-lxd-role:app', () => {
           testDescription: 'the role description',
         },
         {
-          expected: '- https://bithub.com/username/role.git\n- username.myrole',
+          expected: '- role\n- username.myrole',
           testDescription: 'the dependencies',
         },
         {
@@ -233,6 +233,10 @@ describe('generator-molecule-lxd-role:app', () => {
             '  platforms:\n    - name: ubuntu\n      versions:\n        - trusty\n        - xenial\n        - bionic\n',
           testDescription: 'the chosen platforms',
         },
+        {
+          expected: '- { role: role }\n    - { role: username.myrole }\n',
+          testDescription: 'the dependent roles',
+        },
       ];
 
       forEach(
@@ -256,6 +260,22 @@ describe('generator-molecule-lxd-role:app', () => {
 
     describe('vars/main.yml', () => {
       const filePath = 'vars/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('.travis/setup.sh', () => {
+      const filePath = '.travis/setup.sh';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('.travis.yml', () => {
+      const filePath = '.travis.yml';
 
       it('exists', () => {
         assert.file(filePath);

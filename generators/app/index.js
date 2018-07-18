@@ -244,8 +244,14 @@ module.exports = class extends Generator {
         license: this.props.license,
         minAnsibleVer: this.props.minAnsibleVer,
         platforms: this.props.supportedPlatforms,
+        hasDeps: this.props.hasDeps,
+        roleDeps: parseDeps(this.props.roleDeps),
       },
     );
+
+    this.fs.copy(this.templatePath('setup.sh'), this.destinationPath('.travis/setup.sh'));
+
+    this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
   }
 
   install() {

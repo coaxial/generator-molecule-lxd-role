@@ -11,7 +11,6 @@ const {
   juxt,
   map,
   or,
-  path,
   pick,
   prop,
   tail,
@@ -19,6 +18,8 @@ const {
   unnest,
 } = require('ramda');
 const jsyaml = require('js-yaml');
+
+const { basename } = require('path');
 
 const { PLATFORMS } = require('./constants');
 
@@ -64,11 +65,18 @@ const buildChoiceCategory = distroName => {
   return choiceCategory;
 };
 
-const selectRoleOrName = map(dep => or(path(['name'], dep), path(['src'], dep)));
+const nameFromSrc = url => basename(url, '.git');
+const nameOrSrc = curry(deps => {
+  const fallbackProp = prop('src');
+  const ownProp = prop('name');
+  const name = d => ownProp(d) || compose(nameFromSrc, fallbackProp)(d);
+
+  return map(name, deps);
+});
 
 // Public methods
 const choicesFor = compose(unnest, map(buildChoiceCategory));
-const parseDeps = compose(selectRoleOrName, jsyaml.load);
+const parseDeps = compose(nameOrSrc, jsyaml.load);
 
 module.exports = {
   choicesFor,
