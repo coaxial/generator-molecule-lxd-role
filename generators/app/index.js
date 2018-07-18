@@ -1,7 +1,11 @@
 'use strict';
+const { forEach } = require('ramda');
 const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
+const mkdirp = require('mkdirp');
+
+const path = require('path');
 
 const { ANSIBLE_VERSIONS, LICENSES, URLS } = require('../constants');
 const { choicesFor, parseDeps } = require('../helpers');
@@ -147,9 +151,33 @@ module.exports = class extends Generator {
   }
 
   writing() {
+    const destinationPath = this.props.repoName;
+
+    // Create role directory if it doesn't already exist and set it as the root
+    if (path.basename(this.destinationPath()) !== destinationPath) {
+      this.log(`Creating your new role in ${destinationPath}...`);
+      mkdirp(destinationPath);
+      this.destinationRoot(this.destinationPath(destinationPath));
+    }
+    // Create the rest of the directories
+    const dirs = [
+      'defaults',
+      'handlers',
+      'meta',
+      'molecule/default/tests',
+      'tasks',
+      'templates',
+      'files',
+      '.travis',
+      'vars',
+    ];
+
+    forEach(mkdirp, dirs);
+
+    // Copy files
     this.fs.copyTpl(
       this.templatePath('README.md.ejs'),
-      this.destinationPath(`${this.props.repoName}/README.md`),
+      this.destinationPath('README.md'),
       {
         roleName: this.props.roleName,
         roleDesc: this.props.roleDesc,
@@ -163,6 +191,29 @@ module.exports = class extends Generator {
         authorOrganization: this.props.authorOrganization,
         authorWebsite: this.props.authorWebsite,
       },
+    );
+
+    this.fs.copy(
+      this.templatePath('create.yml'),
+      this.destinationPath('molecule/create.yml'),
+    );
+
+    this.fs.copy(
+      this.templatePath('destroy.yml'),
+      this.destinationPath('molecule/destroy.yml'),
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('molecule.yml.ejs'),
+      this.destinationPath('molecule/default/molecule.yml'),
+      {
+        platforms: this.props.supportedPlatforms,
+      },
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('playbook.yml.ejs'),
+      this.destinationPath('molecule/default/playbook.yml'),
     );
   }
 
