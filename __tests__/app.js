@@ -299,36 +299,8 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('README.md', () => {
-      const filePath = 'README.md';
-      const thingsToTest = [
-        {
-          expected: defaultResponses.authorOrganization,
-          testDescription: 'no author organization',
-          assertAbsence: true,
-        },
-        {
-          expected: defaultResponses.authorName,
-          testDescription: 'the author name',
-        },
-        {
-          expected: defaultResponses.authorWebsite,
-          testDescription: 'the author website',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-            assertAbsence: thing.assertAbsence,
-          }),
-        thingsToTest,
-      );
-
       it('formats the author information properly', () => {
-        const actual = readFileSync(filePath, 'utf8');
+        const actual = readFileSync('README.md', 'utf8');
 
         expect(actual).toMatchSnapshot();
       });

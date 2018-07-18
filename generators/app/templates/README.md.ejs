@@ -45,8 +45,8 @@ License
 Author Information
 ------------------
 
-<% if (typeof authorOrganization !== 'undefined' || typeof authorWebsite !== 'undefined') { -%>
-<%- `${authorName} ([${authorOrganization}](${authorWebsite}))` -%>
-<% } else if (typeof authorOrganization === 'undefined' && typeof authorWebsite !== 'undefined') { -%>
+<% if (typeof authorOrganization === 'undefined' && typeof authorWebsite !== 'undefined') { -%>
 <%- `${authorName} ([${authorWebsite}](${authorWebsite}))` %>
+<% } else if (typeof authorOrganization !== 'undefined' || typeof authorWebsite !== 'undefined') { -%>
+<%- `${authorName} ([${authorOrganization}](${authorWebsite}))` -%>
 <% } -%>
