@@ -1,7 +1,8 @@
 'use strict';
-const { forEach } = require('ramda');
+const { clone, forEach } = require('ramda');
 const { paramCase } = require('change-case');
 
+const { readFileSync } = require('fs');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
@@ -9,7 +10,7 @@ const path = require('path');
 const { testFileContents } = require('./__helpers__');
 
 describe('generator-molecule-lxd-role:app', () => {
-  const testResponses = {
+  const defaultResponses = {
     roleName: 'Test role',
     roleDesc: 'This is a test description for the role.',
     hasDeps: true,
@@ -47,50 +48,271 @@ describe('generator-molecule-lxd-role:app', () => {
     ],
   };
 
-  beforeAll(() => {
-    return helpers
-      .run(path.join(__dirname, '../generators/app'))
-      .withPrompts(testResponses);
+  describe('generated files', () => {
+    describe('when all the prompts have answers', () => {
+      const clonedResponses = clone(defaultResponses);
+
+      beforeAll(() => {
+        return helpers
+          .run(path.join(__dirname, '../generators/app'))
+          .withPrompts(clonedResponses);
+      });
+
+      describe('README.md', () => {
+        const filePath = 'README.md';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+
+        const thingsToTest = [
+          {
+            expected: defaultResponses.roleName,
+            testDescription: 'the role name',
+          },
+          {
+            expected: defaultResponses.roleDesc,
+            testDescription: 'the role description',
+          },
+          {
+            expected: '- role\n- username.myrole',
+            testDescription: 'the dependencies',
+          },
+          {
+            expected: defaultResponses.roleReqs,
+            testDescription: 'the requirements',
+          },
+          {
+            expected: `  roles:\n    - ${paramCase(defaultResponses.roleName)}`,
+            testDescription: 'a valid example',
+          },
+          {
+            expected: defaultResponses.license,
+            testDescription: 'the license',
+          },
+          {
+            expected: `${defaultResponses.authorName} ([${
+              defaultResponses.authorOrganization
+            }](${defaultResponses.authorWebsite}))`,
+            testDescription: "the author's information",
+          },
+        ];
+
+        forEach(
+          thing =>
+            testFileContents({
+              filePath,
+              expected: thing.expected,
+              testDescription: thing.testDescription,
+            }),
+          thingsToTest,
+        );
+      });
+
+      describe('molecule/create.yml', () => {
+        it('exists', () => {
+          assert.file('molecule/create.yml');
+        });
+      });
+
+      describe('molecule/destroy.yml', () => {
+        it('exists', () => {
+          assert.file('molecule/destroy.yml');
+        });
+      });
+
+      describe('molecule/default/molecule.yml', () => {
+        const filePath = 'molecule/default/molecule.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+
+        const thingsToTest = [
+          {
+            expected:
+              'platforms:\n  - name: trusty\n    alias: images:ubuntu/trusty\n  - name: xenial\n    alias: images:ubuntu/xenial\n  - name: bionic\n    alias: images:ubuntu/bionic\n',
+            testDescription: 'the chosen platforms',
+          },
+        ];
+
+        forEach(
+          thing =>
+            testFileContents({
+              filePath,
+              expected: thing.expected,
+              testDescription: thing.testDescription,
+            }),
+          thingsToTest,
+        );
+      });
+
+      describe('molecule/default/playbook.yml', () => {
+        const filePath = 'molecule/default/playbook.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+
+        const thingsToTest = [
+          {
+            expected: '    - name: test-role\n',
+            testDescription: 'the role name',
+          },
+        ];
+
+        forEach(
+          thing =>
+            testFileContents({
+              filePath,
+              expected: thing.expected,
+              testDescription: thing.testDescription,
+            }),
+          thingsToTest,
+        );
+      });
+
+      describe('molecule/default/tests/test_default.py', () => {
+        const filePath = 'molecule/default/tests/test_default.py';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('.gitignore', () => {
+        const filePath = '.gitignore';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('defaults/main.yml', () => {
+        const filePath = 'defaults/main.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('handlers/main.yml', () => {
+        const filePath = 'handlers/main.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('meta/main.yml', () => {
+        const filePath = 'meta/main.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+
+        const thingsToTest = [
+          {
+            expected: defaultResponses.authorName,
+            testDescription: 'the author name',
+          },
+          {
+            expected: defaultResponses.authorOrganization,
+            testDescription: 'the author organization',
+          },
+          {
+            expected: defaultResponses.license,
+            testDescription: 'the license',
+          },
+          {
+            expected: defaultResponses.minAnsibleVer,
+            testDescription: 'the minimal ansible version',
+          },
+          {
+            expected: defaultResponses.roleDesc,
+            testDescription: 'the role description',
+          },
+          {
+            expected:
+              '  platforms:\n    - name: ubuntu\n      versions:\n        - trusty\n        - xenial\n        - bionic\n',
+            testDescription: 'the chosen platforms',
+          },
+          {
+            expected: '- { role: role }\n    - { role: username.myrole }\n',
+            testDescription: 'the dependent roles',
+          },
+        ];
+
+        forEach(
+          thing =>
+            testFileContents({
+              filePath,
+              expected: thing.expected,
+              testDescription: thing.testDescription,
+            }),
+          thingsToTest,
+        );
+      });
+
+      describe('tasks/main.yml', () => {
+        const filePath = 'tasks/main.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('vars/main.yml', () => {
+        const filePath = 'vars/main.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('.travis/setup.sh', () => {
+        const filePath = '.travis/setup.sh';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+
+      describe('.travis.yml', () => {
+        const filePath = '.travis.yml';
+
+        it('exists', () => {
+          assert.file(filePath);
+        });
+      });
+    });
   });
 
-  describe('generated files', () => {
+  describe('when there is no organization', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.authorOrganization = undefined;
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
     describe('README.md', () => {
       const filePath = 'README.md';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
       const thingsToTest = [
         {
-          expected: testResponses.roleName,
-          testDescription: 'the role name',
+          expected: defaultResponses.authorOrganization,
+          testDescription: 'no author organization',
+          assertAbsence: true,
         },
         {
-          expected: testResponses.roleDesc,
-          testDescription: 'the role description',
+          expected: defaultResponses.authorName,
+          testDescription: 'the author name',
         },
         {
-          expected: '- role\n- username.myrole',
-          testDescription: 'the dependencies',
-        },
-        {
-          expected: testResponses.roleReqs,
-          testDescription: 'the requirements',
-        },
-        {
-          expected: `  roles:\n    - ${paramCase(testResponses.roleName)}`,
-          testDescription: 'a valid example',
-        },
-        {
-          expected: testResponses.license,
-          testDescription: 'the license',
-        },
-        {
-          expected: `${testResponses.authorName} ([${testResponses.authorOrganization}](${
-            testResponses.authorWebsite
-          }))`,
-          testDescription: "the author's information",
+          expected: defaultResponses.authorWebsite,
+          testDescription: 'the author website',
         },
       ];
 
@@ -100,186 +322,79 @@ describe('generator-molecule-lxd-role:app', () => {
             filePath,
             expected: thing.expected,
             testDescription: thing.testDescription,
+            assertAbsence: thing.assertAbsence,
           }),
         thingsToTest,
       );
-    });
 
-    describe('molecule/create.yml', () => {
-      it('exists', () => {
-        assert.file('molecule/create.yml');
-      });
-    });
+      it('formats the author information properly', () => {
+        const actual = readFileSync(filePath, 'utf8');
 
-    describe('molecule/destroy.yml', () => {
-      it('exists', () => {
-        assert.file('molecule/destroy.yml');
-      });
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      const thingsToTest = [
-        {
-          expected:
-            'platforms:\n  - name: trusty\n    alias: images:ubuntu/trusty\n  - name: xenial\n    alias: images:ubuntu/xenial\n  - name: bionic\n    alias: images:ubuntu/bionic\n',
-          testDescription: 'the chosen platforms',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
-    });
-
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      const thingsToTest = [
-        {
-          expected: '    - name: test-role\n',
-          testDescription: 'the role name',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
-    });
-
-    describe('molecule/default/tests/test_default.py', () => {
-      const filePath = 'molecule/default/tests/test_default.py';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-    });
-
-    describe('.gitignore', () => {
-      const filePath = '.gitignore';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-    });
-
-    describe('defaults/main.yml', () => {
-      const filePath = 'defaults/main.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-    });
-
-    describe('handlers/main.yml', () => {
-      const filePath = 'handlers/main.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
+        expect(actual).toMatchSnapshot();
       });
     });
 
     describe('meta/main.yml', () => {
-      const filePath = 'meta/main.yml';
+      it('formats the metadata properly');
+    });
+  });
 
-      it('exists', () => {
-        assert.file(filePath);
-      });
+  describe('when there is no website', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.authorWebsite = undefined;
 
-      const thingsToTest = [
-        {
-          expected: testResponses.authorName,
-          testDescription: 'the author name',
-        },
-        {
-          expected: testResponses.authorOrganization,
-          testDescription: 'the author organization',
-        },
-        {
-          expected: testResponses.license,
-          testDescription: 'the license',
-        },
-        {
-          expected: testResponses.minAnsibleVer,
-          testDescription: 'the minimal ansible version',
-        },
-        {
-          expected: testResponses.roleDesc,
-          testDescription: 'the role description',
-        },
-        {
-          expected:
-            '  platforms:\n    - name: ubuntu\n      versions:\n        - trusty\n        - xenial\n        - bionic\n',
-          testDescription: 'the chosen platforms',
-        },
-        {
-          expected: '- { role: role }\n    - { role: username.myrole }\n',
-          testDescription: 'the dependent roles',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
     });
 
-    describe('tasks/main.yml', () => {
-      const filePath = 'tasks/main.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
+    describe('README.md', () => {
+      it('formats the author information properly');
     });
 
-    describe('vars/main.yml', () => {
-      const filePath = 'vars/main.yml';
+    describe('meta/main.yml', () => {
+      it('formats the metadata properly');
+    });
+  });
 
-      it('exists', () => {
-        assert.file(filePath);
-      });
+  describe('when there are no dependencies', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.hasDeps = false;
+    clonedResponses.roleDeps = undefined;
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
     });
 
-    describe('.travis/setup.sh', () => {
-      const filePath = '.travis/setup.sh';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
+    describe('README.md', () => {
+      it('skips the dependencies section');
     });
 
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
+    describe('meta/main.yml', () => {
+      it('formats the metadata properly');
+    });
+  });
 
-      it('exists', () => {
-        assert.file(filePath);
-      });
+  describe('when there are no requirements', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.hasReqs = false;
+    clonedResponses.roleReqs = undefined;
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
+    describe('README.md', () => {
+      it('skips the requirents section');
+    });
+
+    describe('meta/main.yml', () => {
+      it('formats the metadata properly');
     });
   });
 });

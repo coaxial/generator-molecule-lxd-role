@@ -1,9 +1,19 @@
 'use strict';
 const assert = require('yeoman-assert');
 
-const testFileContents = ({ filePath, expected, testDescription }) => {
+const testFileContents = ({
+  filePath,
+  expected,
+  testDescription,
+  assertAbsence = false,
+}) => {
   it(`contains ${testDescription}`, () => {
-    assert.fileContent(filePath, expected);
+    let method = 'fileContent';
+    if (assertAbsence) {
+      method = 'noFileContent';
+    }
+
+    assert[method](filePath, expected);
   });
 };
 
