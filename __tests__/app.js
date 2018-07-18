@@ -21,8 +21,7 @@ describe('generator-molecule-lxd-role:app', () => {
     authorName: 'Test author',
     authorOrganization: 'Test organization',
     authorWebsite: 'https://example.org',
-    // Might have to change prompt so that it first asks for families of OS and then which versions amongst these.
-    // right now supportedPlatforms can be an array of platforms or a nested array of platforms
+    minAnsibleVer: '2.4',
     supportedPlatforms: [
       {
         family: 'debian',
@@ -128,7 +127,7 @@ describe('generator-molecule-lxd-role:app', () => {
       const thingsToTest = [
         {
           expected:
-            'platforms:\n  - name: trusty\n    alias: ubuntu/trusty\n  - name: xenial\n    alias: ubuntu/xenial\n  - name: bionic\n    alias: ubuntu/bionic\n',
+            'platforms:\n  - name: trusty\n    alias: images:ubuntu/trusty\n  - name: xenial\n    alias: images:ubuntu/xenial\n  - name: bionic\n    alias: images:ubuntu/bionic\n',
           testDescription: 'the chosen platforms',
         },
       ];
@@ -145,8 +144,121 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('molecule/default/playbook.yml', () => {
+      const filePath = 'molecule/default/playbook.yml';
+
       it('exists', () => {
-        assert.file('molecule/default/playbook.yml');
+        assert.file(filePath);
+      });
+
+      const thingsToTest = [
+        {
+          expected: '    - name: test-role\n',
+          testDescription: 'the role name',
+        },
+      ];
+
+      forEach(
+        thing =>
+          testFileContents({
+            filePath,
+            expected: thing.expected,
+            testDescription: thing.testDescription,
+          }),
+        thingsToTest,
+      );
+    });
+
+    describe('molecule/default/tests/test_default.py', () => {
+      const filePath = 'molecule/default/tests/test_default.py';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('.gitignore', () => {
+      const filePath = '.gitignore';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('defaults/main.yml', () => {
+      const filePath = 'defaults/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('handlers/main.yml', () => {
+      const filePath = 'handlers/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('meta/main.yml', () => {
+      const filePath = 'meta/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      const thingsToTest = [
+        {
+          expected: testResponses.authorName,
+          testDescription: 'the author name',
+        },
+        {
+          expected: testResponses.authorOrganization,
+          testDescription: 'the author organization',
+        },
+        {
+          expected: testResponses.license,
+          testDescription: 'the license',
+        },
+        {
+          expected: testResponses.minAnsibleVer,
+          testDescription: 'the minimal ansible version',
+        },
+        {
+          expected: testResponses.roleDesc,
+          testDescription: 'the role description',
+        },
+        {
+          expected:
+            '  platforms:\n    - name: ubuntu\n      versions:\n        - trusty\n        - xenial\n        - bionic\n',
+          testDescription: 'the chosen platforms',
+        },
+      ];
+
+      forEach(
+        thing =>
+          testFileContents({
+            filePath,
+            expected: thing.expected,
+            testDescription: thing.testDescription,
+          }),
+        thingsToTest,
+      );
+    });
+
+    describe('tasks/main.yml', () => {
+      const filePath = 'tasks/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+    });
+
+    describe('vars/main.yml', () => {
+      const filePath = 'vars/main.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
       });
     });
   });

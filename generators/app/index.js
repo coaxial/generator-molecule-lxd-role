@@ -193,6 +193,8 @@ module.exports = class extends Generator {
       },
     );
 
+    this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'));
+
     this.fs.copy(
       this.templatePath('create.yml'),
       this.destinationPath('molecule/create.yml'),
@@ -214,6 +216,35 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('playbook.yml.ejs'),
       this.destinationPath('molecule/default/playbook.yml'),
+      { roleName: paramCase(this.props.roleName) },
+    );
+
+    this.fs.copy(
+      this.templatePath('test_default.py'),
+      this.destinationPath('molecule/default/tests/test_default.py'),
+    );
+
+    const mains = ['defaults', 'handlers', 'tasks', 'vars'];
+    forEach(
+      f =>
+        this.fs.copy(
+          this.templatePath('main.yml'),
+          this.destinationPath(`${f}/main.yml`),
+        ),
+      mains,
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('meta_main.yml.ejs'),
+      this.destinationPath('meta/main.yml'),
+      {
+        authorName: this.props.authorName,
+        roleDesc: this.props.roleDesc,
+        authorOrganization: this.props.authorOrganization,
+        license: this.props.license,
+        minAnsibleVer: this.props.minAnsibleVer,
+        platforms: this.props.supportedPlatforms,
+      },
     );
   }
 

@@ -8,7 +8,7 @@ lint:
 platforms:
 <% platforms.forEach(platform => { -%>
 <%-`  - name: ${platform.codeName}` %>
-<%-`    alias: ${platform.distribution}/${platform.codeName}` %>
+<%-`    alias: images:${platform.distribution}/${platform.codeName}` %>
 <% }) -%>
 provisioner:
   name: ansible

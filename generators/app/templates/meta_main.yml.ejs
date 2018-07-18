@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: <%- authorName %>
+  description: <%- roleDesc %>
+<% if(typeof authorOrganization !== 'undefined') { -%>
+  <%- `  company: ${authorOrganization}` %>
+<% } -%>
+  license: <%- license %>
+  min_ansible_version: <%- minAnsibleVer %>
+  platforms:
+<% platforms.forEach((p, index) => { -%>
+<% if(index === 0) { -%>
+    <%- `- name: ${p.distribution}` %>
+      <%- `versions:` %>
+<% } -%>
+        <%- `- ${p.codeName}` %>
+<% }) -%>
+  galaxy_tags: []
+dependencies: []
