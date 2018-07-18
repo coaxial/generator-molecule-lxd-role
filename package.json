@@ -45,7 +45,8 @@
     "yeoman-generator": "^2.0.1"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": ["node_modules/", "__helpers__"]
   },
   "scripts": {
     "prepublishOnly": "nsp check",

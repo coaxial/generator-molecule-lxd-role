@@ -1,9 +1,11 @@
 'use strict';
+const { forEach } = require('ramda');
 const { paramCase } = require('change-case');
 
-const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
+
+const { testFileContents } = require('./__helpers__');
 
 describe('generator-molecule-lxd-role:app', () => {
   const testResponses = {
@@ -30,47 +32,51 @@ describe('generator-molecule-lxd-role:app', () => {
       .withPrompts(testResponses);
   });
 
-  it('creates files', () => {
-    assert.file([`${paths.base}/README.md`]);
-  });
-
-  describe('files contents', () => {
+  describe('creates files', () => {
     describe('README.md', () => {
-      it('contains the role name as the title', () => {
-        assert.fileContent(`${paths.base}/README.md`, testResponses.roleName);
-      });
+      const filePath = `${paths.base}/README.md`;
+      const thingsToTest = [
+        {
+          expected: testResponses.roleName,
+          testDescription: 'the role name',
+        },
+        {
+          expected: testResponses.roleDesc,
+          testDescription: 'the role description',
+        },
+        {
+          expected: '- https://bithub.com/username/role.git\n- username.myrole',
+          testDescription: 'the dependencies',
+        },
+        {
+          expected: testResponses.roleReqs,
+          testDescription: 'the requirements',
+        },
+        {
+          expected: `  roles:\n    - ${paramCase(testResponses.roleName)}`,
+          testDescription: 'a valid example',
+        },
+        {
+          expected: testResponses.license,
+          testDescription: 'the license',
+        },
+        {
+          expected: `${testResponses.authorName} ([${testResponses.authorOrganization}](${
+            testResponses.authorWebsite
+          }))`,
+          testDescription: "the author's information",
+        },
+      ];
 
-      it('contains the description', () => {
-        assert.fileContent(`${paths.base}/README.md`, testResponses.roleDesc);
-      });
-
-      it('contains the dependencies', () => {
-        const expected = '- https://bithub.com/username/role.git\n- username.myrole';
-
-        assert.fileContent(`${paths.base}/README.md`, expected);
-      });
-
-      it('contains the requirements', () => {
-        assert.fileContent(`${paths.base}/README.md`, testResponses.roleReqs);
-      });
-
-      it('contains a valid example', () => {
-        const expected = `  roles:\n    - ${paramCase(testResponses.roleName)}`;
-
-        assert.fileContent(`${paths.base}/README.md`, expected);
-      });
-
-      it('contains the license', () => {
-        assert.fileContent(`${paths.base}/README.md`, testResponses.license);
-      });
-
-      it("contains the author's information", () => {
-        const expected = `${testResponses.authorName} ([${
-          testResponses.authorOrganization
-        }](${testResponses.authorWebsite}))`;
-
-        assert.fileContent(`${paths.base}/README.md`, expected);
-      });
+      forEach(
+        thing =>
+          testFileContents({
+            filePath,
+            expected: thing.expected,
+            testDescription: thing.testDescription,
+          }),
+        thingsToTest,
+      );
     });
   });
 });
