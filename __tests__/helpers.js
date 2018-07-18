@@ -29,6 +29,18 @@ describe('helpers', () => {
   });
 
   describe('#parseDeps', () => {
+    it('handles being passed undefined', () => {
+      assert.doesNotThrow(() => parseDeps(undefined));
+    });
+
+    it('handles being passed empty string', () => {
+      assert.doesNotThrow(() => parseDeps(''));
+    });
+
+    it('handles being passed empty array', () => {
+      assert.doesNotThrow(() => parseDeps([]));
+    });
+
     describe('when there is a name', () => {
       const testDeps =
         '- name: username.myrole\n  src: https://bithub.com/username/myrole.git';
