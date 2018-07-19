@@ -28,7 +28,16 @@ const { basename } = require('path');
 const { PLATFORMS } = require('./constants');
 
 // Utilities
-const capitalize = compose(join(''), juxt([compose(toUpper, head), tail]));
+const capitalize = compose(
+  join(''),
+  juxt([
+    compose(
+      toUpper,
+      head,
+    ),
+    tail,
+  ]),
+);
 
 // Tests
 // Versions have tags to define whether they're LTS etc, we can use the tests to filter them out into separate lists.
@@ -73,14 +82,28 @@ const nameFromSrc = curry(url => basename(url, '.git'));
 const nameOrSrc = curry(deps => {
   const fallbackProp = prop('src');
   const ownProp = prop('name');
-  const name = d => ownProp(d) || compose(nameFromSrc, fallbackProp)(d);
+  const name = d =>
+    ownProp(d) ||
+    compose(
+      nameFromSrc,
+      fallbackProp,
+    )(d);
 
   return map(name, deps);
 });
 
 // Public methods
-const choicesFor = compose(unnest, map(buildChoiceCategory));
-const parseDeps = unless(either(isEmpty, isNil), compose(nameOrSrc, jsyaml.load));
+const choicesFor = compose(
+  unnest,
+  map(buildChoiceCategory),
+);
+const parseDeps = unless(
+  either(isEmpty, isNil),
+  compose(
+    nameOrSrc,
+    jsyaml.load,
+  ),
+);
 
 module.exports = {
   choicesFor,
