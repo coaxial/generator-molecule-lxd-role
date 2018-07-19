@@ -1,5 +1,5 @@
 'use strict';
-const { forEach } = require('ramda');
+const { either, forEach, isEmpty, isNil, not } = require('ramda');
 const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -23,17 +23,9 @@ module.exports = class extends Generator {
         message: "What is the new role's name?",
       },
       {
-        type: 'confirm',
-        name: 'repoNameDiffers',
-        message: "Use a different name for the role's directory?",
-        default: true,
-        store: true,
-      },
-      {
-        when: answers => answers.repoNameDiffers,
         type: 'input',
         name: 'repoName',
-        message: "What will be the role's directory name?",
+        message: 'What directory will the role be created in?',
         default: answers => `ansible-role-${paramCase(answers.roleName)}`,
       },
       {
@@ -82,6 +74,7 @@ module.exports = class extends Generator {
         )}`,
         choices: choicesFor(['ubuntu', 'debian']),
         store: true,
+        validate: not(either(isEmpty, isNil)),
       },
       {
         type: 'confirm',

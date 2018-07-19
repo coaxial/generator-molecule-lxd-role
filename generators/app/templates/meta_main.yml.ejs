@@ -2,7 +2,7 @@
 galaxy_info:
   author: <%- authorName %>
   description: <%- roleDesc %>
-<% if(typeof authorOrganization !== 'undefined') { -%>
+<% if(typeof authorOrganization !== 'undefined' || typeof authorOrganization !== '') { -%>
   company: <%- authorOrganization %>
 <% } -%>
   license: <%- license %>
