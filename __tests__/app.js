@@ -21,7 +21,8 @@ describe('generator-molecule-lxd-role:app', () => {
     authorOrganization: 'Test organization',
     authorWebsite: 'https://example.org',
     minAnsibleVer: '2.4',
-    supportedPlatforms: [
+    targetDistributions: ['UBUNTU'],
+    targetVersions: [
       {
         family: 'debian',
         distribution: 'ubuntu',

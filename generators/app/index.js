@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not } = require('ramda');
+const { either, forEach, isEmpty, isNil, not, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -7,8 +7,8 @@ const mkdirp = require('mkdirp');
 
 const path = require('path');
 
-const { ANSIBLE_VERSIONS, LICENSES, URLS } = require('../constants');
-const { choicesFor, parseDeps } = require('../helpers');
+const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
+const { listPlatforms, listVersions, parseDeps } = require('../helpers');
 
 module.exports = class extends Generator {
   prompting() {
@@ -70,12 +70,22 @@ module.exports = class extends Generator {
       },
       {
         type: 'checkbox',
-        name: 'supportedPlatforms',
-        message: `Which platform does this role target? ${chalk.reset.gray.italic(
-          'Is your favourite platform missing? Let us know here: ' +
-            URLS.MISSING_PLATFORM,
+        name: 'targetDistributions',
+        message: `Which distributions does this role target? ${chalk.reset.gray.italic(
+          'Is your favourite distribution missing? Let us know here: ' + URLS.ISSUES,
         )}`,
-        choices: choicesFor(['ubuntu', 'debian']),
+        choices: listPlatforms(PLATFORMS),
+        store: true,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
+        filter: toUpper,
+      },
+      {
+        type: 'checkbox',
+        name: 'targetVersions',
+        message: `Which versions does this role support? ${chalk.reset.gray.italic(
+          'Are the versions outdated? File an issue here: ' + URLS.ISSUES,
+        )}`,
+        choices: answers => listVersions(answers.targetDistributions),
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
       },
@@ -178,17 +188,17 @@ module.exports = class extends Generator {
       this.templatePath('README.md.ejs'),
       this.destinationPath('README.md'),
       {
-        roleName: this.props.roleName,
-        roleDesc: this.props.roleDesc,
-        hasDeps: this.props.hasDeps,
-        roleDeps: parseDeps(this.props.roleDeps),
-        hasReqs: this.props.hasReqs,
-        roleReqs: this.props.roleReqs,
-        roleNameExample: paramCase(this.props.roleName),
-        license: this.props.license,
         authorName: this.props.authorName,
         authorOrganization: this.props.authorOrganization,
         authorWebsite: this.props.authorWebsite,
+        hasDeps: this.props.hasDeps,
+        hasReqs: this.props.hasReqs,
+        license: this.props.license,
+        roleDeps: parseDeps(this.props.roleDeps),
+        roleDesc: this.props.roleDesc,
+        roleName: this.props.roleName,
+        roleNameExample: paramCase(this.props.roleName),
+        roleReqs: this.props.roleReqs,
       },
     );
 
@@ -208,7 +218,7 @@ module.exports = class extends Generator {
       this.templatePath('molecule.yml.ejs'),
       this.destinationPath('molecule/default/molecule.yml'),
       {
-        platforms: this.props.supportedPlatforms,
+        targetVersions: this.props.targetVersions,
       },
     );
 
@@ -238,13 +248,14 @@ module.exports = class extends Generator {
       this.destinationPath('meta/main.yml'),
       {
         authorName: this.props.authorName,
-        roleDesc: this.props.roleDesc,
         authorOrganization: this.props.authorOrganization,
+        hasDeps: this.props.hasDeps,
         license: this.props.license,
         minAnsibleVer: this.props.minAnsibleVer,
         platforms: this.props.supportedPlatforms,
-        hasDeps: this.props.hasDeps,
         roleDeps: parseDeps(this.props.roleDeps),
+        roleDesc: this.props.roleDesc,
+        targetVersions: this.props.targetVersions,
       },
     );
 

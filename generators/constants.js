@@ -91,7 +91,7 @@ const LICENSES = [
 ];
 
 const URLS = {
-  MISSING_PLATFORM: 'https://v.gd/fihumo',
+  ISSUES: 'https://v.gd/fihumo',
   LICENSE_INFO: 'https://v.gd/afifeg',
   DEPENDENCIES_FORMAT: 'https://v.gd/hohufa',
 };

@@ -6,9 +6,9 @@ driver:
 lint:
   name: yamllint
 platforms:
-<% platforms.forEach(platform => { -%>
-<%-`  - name: ${platform.codeName}` %>
-<%-`    alias: images:${platform.distribution}/${platform.codeName}` %>
+<% targetVersions.forEach(version => { -%>
+<%-`  - name: ${version.codeName}` %>
+<%-`    alias: images:${version.distribution}/${version.codeName}` %>
 <% }) -%>
 provisioner:
   name: ansible

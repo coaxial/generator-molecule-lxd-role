@@ -1,18 +1,26 @@
 'use strict';
 const assert = require('yeoman-assert');
 
-const { capitalize, choicesFor, parseDeps } = require('../generators/helpers');
+const { PLATFORMS } = require('../generators/constants');
+const {
+  capitalize,
+  listPlatforms,
+  listVersions,
+  parseDeps,
+} = require('../generators/helpers');
 
 describe('helpers', () => {
-  describe('#choicesFor', () => {
-    it('returns the requested distros only', () => {
-      const actual = choicesFor(['ubuntu']);
+  describe('#listVersions', () => {
+    it('returns the list of versions', () => {
+      const actual = listVersions(['UBUNTU', 'DEBIAN']);
 
       expect(actual).toMatchSnapshot();
     });
+  });
 
-    it('works with multiple distros', () => {
-      const actual = choicesFor(['debian', 'ubuntu']);
+  describe('#listPlatforms', () => {
+    it('returns the list of platforms', () => {
+      const actual = listPlatforms(PLATFORMS);
 
       expect(actual).toMatchSnapshot();
     });

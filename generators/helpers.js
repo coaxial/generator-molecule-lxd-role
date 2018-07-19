@@ -2,21 +2,19 @@
 const { Separator } = require('inquirer');
 const {
   compose,
-  concat,
-  contains,
   curry,
   either,
-  filter,
   head,
+  insert,
   isEmpty,
   isNil,
   join,
   juxt,
+  keys,
   map,
-  or,
-  pick,
   prop,
   tail,
+  toLower,
   toUpper,
   unless,
   unnest,
@@ -39,45 +37,7 @@ const capitalize = compose(
   ]),
 );
 
-// Tests
-// Versions have tags to define whether they're LTS etc, we can use the tests to filter them out into separate lists.
-const tagsProp = prop('tags');
-const isLts = curry(version => contains('lts', tagsProp(version)));
-const isCurrent = curry(version => contains('current', tagsProp(version)));
-
-const isFuture = curry(version => contains('future', tagsProp(version)));
-// Lists
-const lts = filter(isLts);
-const current = filter(isCurrent);
-const future = filter(isFuture);
-const all = map(version => ({
-  name: or(capitalize(version.codeName), capitalize(version.versionNumber)),
-  value: pick(['family', 'distribution', 'codeName', 'versionNumber'], version),
-}));
-
 // Private methods
-const buildChoiceCategory = distroName => {
-  // A choice category has a separator, then pre-defined groups of
-  // versions (lts, current + future), and finally every version to
-  // be picked individually.
-  const versions = PLATFORMS[`${toUpper(distroName)}`];
-  const separator = new Separator(`↓  ${capitalize(distroName)} ↓ `);
-  const allLtsChoice = {
-    name: `All LTS (${capitalize(distroName)})`,
-    value: lts(versions),
-  };
-  const allCurrentAndFutureChoice = {
-    name: `All current and future (${capitalize(distroName)})`,
-    value: concat(current(versions), future(versions)),
-  };
-  const groupsChoice = [allLtsChoice, allCurrentAndFutureChoice];
-  const individualChoice = all(versions);
-  const allChoices = concat(groupsChoice, individualChoice);
-  const choiceCategory = concat([separator], allChoices);
-
-  return choiceCategory;
-};
-
 const nameFromSrc = curry(url => basename(url, '.git'));
 const nameOrSrc = curry(deps => {
   const fallbackProp = prop('src');
@@ -91,12 +51,11 @@ const nameOrSrc = curry(deps => {
 
   return map(name, deps);
 });
+const separator = label => new Separator(`↓  ${capitalize(label)} ↓ `);
+const versions = platformName =>
+  insert(0, separator(toLower(platformName)), prop(platformName, PLATFORMS));
 
 // Public methods
-const choicesFor = compose(
-  unnest,
-  map(buildChoiceCategory),
-);
 const parseDeps = unless(
   either(isEmpty, isNil),
   compose(
@@ -104,9 +63,20 @@ const parseDeps = unless(
     jsyaml.load,
   ),
 );
+const listPlatforms = compose(
+  map(capitalize),
+  map(toLower),
+  keys,
+);
+
+const listVersions = compose(
+  unnest,
+  map(versions),
+);
 
 module.exports = {
-  choicesFor,
+  listPlatforms,
   capitalize,
   parseDeps,
+  listVersions,
 };
