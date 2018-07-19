@@ -1,5 +1,5 @@
 'use strict';
-const { curry, either, forEach, isEmpty, isNil, not } = require('ramda');
+const { either, forEach, isEmpty, isNil, not } = require('ramda');
 const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -21,6 +21,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'roleName',
         message: "What is the new role's name?",
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'input',
@@ -33,6 +34,7 @@ module.exports = class extends Generator {
         name: 'authorName',
         message: "Who is this role's author (full name or nickname)?",
         store: true,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'input',
@@ -56,6 +58,7 @@ module.exports = class extends Generator {
         message: `How would you describe this role's purpose in a few words? ${chalk.reset.gray.italic(
           'Markdown supported.',
         )}`,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'list',
@@ -74,7 +77,7 @@ module.exports = class extends Generator {
         )}`,
         choices: choicesFor(['ubuntu', 'debian']),
         store: true,
-        validate: curry(ans => not(either(isEmpty, isNil))(ans)),
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'confirm',
@@ -89,6 +92,7 @@ module.exports = class extends Generator {
         name: 'travisUsername',
         message: 'What is your Travis CI username?',
         store: true,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'list',
@@ -120,6 +124,7 @@ module.exports = class extends Generator {
         message: `Enter this role's requirements. ${chalk.reset.gray.italic(
           'Usually details specific OS requirements, assumptions, etc. Markdown valid here.',
         )}`,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
       {
         type: 'confirm',
@@ -135,6 +140,7 @@ module.exports = class extends Generator {
           'Enter the roles on which your role will depend. See ' +
           URLS.DEPENDENCIES_FORMAT +
           " for how to format your entries, they'll be inserted verbatim into a requirements.yml file.",
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
     ];
 
