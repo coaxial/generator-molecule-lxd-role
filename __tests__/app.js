@@ -55,6 +55,7 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
+        .withLocalConfig({})
         .withPrompts(clonedResponses);
     });
 
@@ -294,6 +295,7 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
+        .withLocalConfig({})
         .withPrompts(clonedResponses);
     });
 
@@ -321,6 +323,7 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
+        .withLocalConfig({})
         .withPrompts(clonedResponses);
     });
 
@@ -349,6 +352,7 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
+        .withLocalConfig({})
         .withPrompts(clonedResponses);
     });
 
@@ -377,6 +381,7 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
+        .withLocalConfig({})
         .withPrompts(clonedResponses);
     });
 
