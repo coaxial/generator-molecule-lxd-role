@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not } = require('ramda');
+const { curry, either, forEach, isEmpty, isNil, not } = require('ramda');
 const { paramCase } = require('change-case');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
@@ -74,7 +74,7 @@ module.exports = class extends Generator {
         )}`,
         choices: choicesFor(['ubuntu', 'debian']),
         store: true,
-        validate: not(either(isEmpty, isNil)),
+        validate: curry(ans => not(either(isEmpty, isNil))(ans)),
       },
       {
         type: 'confirm',

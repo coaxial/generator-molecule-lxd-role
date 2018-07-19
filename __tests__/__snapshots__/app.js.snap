@@ -228,7 +228,9 @@ MIT
 Author Information
 ------------------
 
-Test author ([Test organization](https://example.org))"
+
+Test author (Test organization)
+"
 `;
 
 exports[`generator-molecule-lxd-role:app when there is no website meta/main.yml formats the metadata properly 1`] = `

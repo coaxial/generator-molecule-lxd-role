@@ -55,7 +55,6 @@ describe('generator-molecule-lxd-role:app', () => {
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
-        .inTmpDir(dir => console.log({ dir }))
         .withPrompts(clonedResponses);
     });
 
@@ -288,16 +287,13 @@ describe('generator-molecule-lxd-role:app', () => {
     });
   });
 
-  describe.only('when there is no organization', () => {
+  describe('when there is no organization', () => {
     const clonedResponses = clone(defaultResponses);
     clonedResponses.authorOrganization = undefined;
-    console.log({ clonedResponses });
 
     beforeAll(() => {
-      console.log({ clonedResponses });
       return helpers
         .run(path.join(__dirname, '../generators/app'))
-        .inTmpDir(dir => console.log({ dir }))
         .withPrompts(clonedResponses);
     });
 

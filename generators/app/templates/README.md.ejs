@@ -48,7 +48,6 @@ Author Information
 <% if (typeof authorOrganization === 'undefined' && typeof authorWebsite === 'undefined') { -%>
 <%- authorName %>
 <% } else if (typeof authorOrganization === 'undefined' && typeof authorWebsite !== 'undefined') { -%>
-  heyo
 <%- `${authorName} ([${authorWebsite}](${authorWebsite}))` %>
 <% } else if (typeof authorOrganization !== 'undefined' && typeof authorWebsite === 'undefined') { %>
 <%- `${authorName} (${authorOrganization})` %>
