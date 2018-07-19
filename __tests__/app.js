@@ -307,7 +307,11 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('meta/main.yml', () => {
-      it('formats the metadata properly');
+      it('formats the metadata properly', () => {
+        const actual = readFileSync('meta/main.yml', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
   });
 
@@ -322,7 +326,11 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('README.md', () => {
-      it('formats the author information properly');
+      it('formats the author information properly', () => {
+        const actual = readFileSync('README.md', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('meta/main.yml', () => {

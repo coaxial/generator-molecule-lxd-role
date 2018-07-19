@@ -78,7 +78,6 @@ const buildChoiceCategory = distroName => {
   return choiceCategory;
 };
 
-// Const nameFromSrc = url => unless(or(isEmpty, isNil), curry(url => basename(url, '.git')))(url);
 const nameFromSrc = curry(url => basename(url, '.git'));
 const nameOrSrc = curry(deps => {
   const fallbackProp = prop('src');
