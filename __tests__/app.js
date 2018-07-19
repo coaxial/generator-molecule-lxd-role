@@ -334,7 +334,11 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('meta/main.yml', () => {
-      it('formats the metadata properly');
+      it('formats the metadata properly', () => {
+        const actual = readFileSync('meta/main.yml', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
   });
 
@@ -350,11 +354,19 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('README.md', () => {
-      it('skips the dependencies section');
+      it('skips the dependencies section', () => {
+        const actual = readFileSync('README.md', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('meta/main.yml', () => {
-      it('formats the metadata properly');
+      it('formats the metadata properly', () => {
+        const actual = readFileSync('meta/main.yml', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
   });
 
@@ -370,11 +382,19 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('README.md', () => {
-      it('skips the requirents section');
+      it('skips the requirents section', () => {
+        const actual = readFileSync('README.md', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('meta/main.yml', () => {
-      it('formats the metadata properly');
+      it('formats the metadata properly', () => {
+        const actual = readFileSync('meta/main.yml', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
   });
 });

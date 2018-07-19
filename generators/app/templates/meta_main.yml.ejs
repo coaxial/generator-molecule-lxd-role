@@ -3,7 +3,7 @@ galaxy_info:
   author: <%- authorName %>
   description: <%- roleDesc %>
 <% if(typeof authorOrganization !== 'undefined') { -%>
-    company: <%- authorOrganization %>
+  company: <%- authorOrganization %>
 <% } -%>
   license: <%- license %>
   min_ansible_version: <%- minAnsibleVer %>
@@ -16,9 +16,11 @@ galaxy_info:
         - <%- p.codeName %>
 <% }) -%>
   galaxy_tags: []
-  dependencies:
 <% if(hasDeps) { -%>
+  dependencies:
 <% roleDeps.forEach(dep => { -%>
     - { role: <%- dep %> }
 <% }) -%>
+<% } else { -%>
+  dependencies: []
 <% } -%>
