@@ -1,13 +1,10 @@
 'use strict';
-const { clone, forEach } = require('ramda');
-const { paramCase } = require('change-case');
+const { clone } = require('ramda');
 
 const { readFileSync } = require('fs');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
-
-const { testFileContents } = require('./__helpers__');
 
 describe('generator-molecule-lxd-role:app', () => {
   const defaultResponses = {
@@ -70,49 +67,6 @@ describe('generator-molecule-lxd-role:app', () => {
 
         expect(actual).toMatchSnapshot();
       });
-
-      const thingsToTest = [
-        {
-          expected: defaultResponses.roleName,
-          testDescription: 'the role name',
-        },
-        {
-          expected: defaultResponses.roleDesc,
-          testDescription: 'the role description',
-        },
-        {
-          expected: '- role\n- username.myrole',
-          testDescription: 'the dependencies',
-        },
-        {
-          expected: defaultResponses.roleReqs,
-          testDescription: 'the requirements',
-        },
-        {
-          expected: `  roles:\n    - ${paramCase(defaultResponses.roleName)}`,
-          testDescription: 'a valid example',
-        },
-        {
-          expected: defaultResponses.license,
-          testDescription: 'the license',
-        },
-        {
-          expected: `${defaultResponses.authorName} ([${
-            defaultResponses.authorOrganization
-          }](${defaultResponses.authorWebsite}))`,
-          testDescription: "the author's information",
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
     });
 
     describe('molecule/create.yml', () => {
@@ -155,24 +109,6 @@ describe('generator-molecule-lxd-role:app', () => {
 
         expect(actual).toMatchSnapshot();
       });
-
-      const thingsToTest = [
-        {
-          expected:
-            'platforms:\n  - name: trusty\n    alias: images:ubuntu/trusty\n  - name: xenial\n    alias: images:ubuntu/xenial\n  - name: bionic\n    alias: images:ubuntu/bionic\n',
-          testDescription: 'the chosen platforms',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
     });
 
     describe('molecule/default/playbook.yml', () => {
@@ -187,23 +123,6 @@ describe('generator-molecule-lxd-role:app', () => {
 
         expect(actual).toMatchSnapshot();
       });
-
-      const thingsToTest = [
-        {
-          expected: '    - name: test-role\n',
-          testDescription: 'the role name',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
     });
 
     describe('molecule/default/tests/test_default.py', () => {
@@ -274,48 +193,6 @@ describe('generator-molecule-lxd-role:app', () => {
 
         expect(actual).toMatchSnapshot();
       });
-
-      const thingsToTest = [
-        {
-          expected: defaultResponses.authorName,
-          testDescription: 'the author name',
-        },
-        {
-          expected: defaultResponses.authorOrganization,
-          testDescription: 'the author organization',
-        },
-        {
-          expected: defaultResponses.license,
-          testDescription: 'the license',
-        },
-        {
-          expected: defaultResponses.minAnsibleVer,
-          testDescription: 'the minimal ansible version',
-        },
-        {
-          expected: defaultResponses.roleDesc,
-          testDescription: 'the role description',
-        },
-        {
-          expected:
-            '  platforms:\n    - name: ubuntu\n      versions:\n        - trusty\n        - xenial\n        - bionic\n',
-          testDescription: 'the chosen platforms',
-        },
-        {
-          expected: '- { role: role }\n    - { role: username.myrole }\n',
-          testDescription: 'the dependent roles',
-        },
-      ];
-
-      forEach(
-        thing =>
-          testFileContents({
-            filePath,
-            expected: thing.expected,
-            testDescription: thing.testDescription,
-          }),
-        thingsToTest,
-      );
     });
 
     describe('tasks/main.yml', () => {
