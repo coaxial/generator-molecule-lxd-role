@@ -65,6 +65,12 @@ describe('generator-molecule-lxd-role:app', () => {
         assert.file(filePath);
       });
 
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+
       const thingsToTest = [
         {
           expected: defaultResponses.roleName,
@@ -110,14 +116,30 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     describe('molecule/create.yml', () => {
+      const filePath = 'molecule/create.yml';
+
       it('exists', () => {
-        assert.file('molecule/create.yml');
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
 
     describe('molecule/destroy.yml', () => {
+      const filePath = 'molecule/destroy.yml';
+
       it('exists', () => {
-        assert.file('molecule/destroy.yml');
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
 
@@ -126,6 +148,12 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('exists', () => {
         assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
 
       const thingsToTest = [
@@ -154,6 +182,12 @@ describe('generator-molecule-lxd-role:app', () => {
         assert.file(filePath);
       });
 
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+
       const thingsToTest = [
         {
           expected: '    - name: test-role\n',
@@ -178,6 +212,12 @@ describe('generator-molecule-lxd-role:app', () => {
       it('exists', () => {
         assert.file(filePath);
       });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('.gitignore', () => {
@@ -185,6 +225,12 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('exists', () => {
         assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
 
@@ -194,6 +240,12 @@ describe('generator-molecule-lxd-role:app', () => {
       it('exists', () => {
         assert.file(filePath);
       });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('handlers/main.yml', () => {
@@ -202,6 +254,12 @@ describe('generator-molecule-lxd-role:app', () => {
       it('exists', () => {
         assert.file(filePath);
       });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('meta/main.yml', () => {
@@ -209,6 +267,12 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('exists', () => {
         assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
 
       const thingsToTest = [
@@ -260,6 +324,12 @@ describe('generator-molecule-lxd-role:app', () => {
       it('exists', () => {
         assert.file(filePath);
       });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('vars/main.yml', () => {
@@ -267,6 +337,12 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('exists', () => {
         assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
 
@@ -276,6 +352,12 @@ describe('generator-molecule-lxd-role:app', () => {
       it('exists', () => {
         assert.file(filePath);
       });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('.travis.yml', () => {
@@ -283,6 +365,12 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('exists', () => {
         assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
   });
