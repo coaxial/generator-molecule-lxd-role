@@ -5,6 +5,7 @@ const {
   curry,
   either,
   head,
+  ifElse,
   insert,
   isEmpty,
   isNil,
@@ -13,12 +14,14 @@ const {
   keys,
   map,
   prop,
+  propEq,
   tail,
   toLower,
   toUpper,
   unless,
   unnest,
 } = require('ramda');
+const { snakeCase } = require('change-case');
 const jsyaml = require('js-yaml');
 
 const { basename } = require('path');
@@ -55,6 +58,21 @@ const separator = label => new Separator(`↓  ${capitalize(label)} ↓ `);
 const versions = platformName =>
   insert(0, separator(toLower(platformName)), prop(platformName, PLATFORMS));
 
+const generateListForVersions = map(version => {
+  const isUbuntu = propEq('distribution', 'ubuntu');
+  const ubuntuFormat = ubuntu => `ubuntu:${prop('versionNumber', ubuntu)}`;
+  const nonUbuntuFormat = notUubntu =>
+    `images:${prop('distribution', notUubntu)}/${prop('versionNumber', notUubntu)}`;
+  const versionLabel = either(prop('codeName'), prop('versionNumber'));
+
+  const aliasValue = ifElse(isUbuntu, ubuntuFormat, nonUbuntuFormat);
+
+  return {
+    name: snakeCase(`${prop('distribution', version)} ${versionLabel(version)}`),
+    alias: aliasValue(version),
+  };
+});
+
 // Public methods
 const parseDeps = unless(
   either(isEmpty, isNil),
@@ -74,9 +92,12 @@ const listVersions = compose(
   map(versions),
 );
 
+const moleculePlatforms = generateListForVersions;
+
 module.exports = {
   listPlatforms,
   capitalize,
   parseDeps,
   listVersions,
+  moleculePlatforms,
 };

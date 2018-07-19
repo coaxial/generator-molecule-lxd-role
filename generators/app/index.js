@@ -1,6 +1,7 @@
 'use strict';
 const { either, forEach, isEmpty, isNil, not, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
+const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const mkdirp = require('mkdirp');
@@ -8,7 +9,12 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 
 const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
-const { listPlatforms, listVersions, parseDeps } = require('../helpers');
+const {
+  listPlatforms,
+  listVersions,
+  moleculePlatforms,
+  parseDeps,
+} = require('../helpers');
 
 module.exports = class extends Generator {
   prompting() {
@@ -218,7 +224,7 @@ module.exports = class extends Generator {
       this.templatePath('molecule.yml.ejs'),
       this.destinationPath('molecule/default/molecule.yml'),
       {
-        targetVersions: this.props.targetVersions,
+        platforms: safeDump({ platforms: moleculePlatforms(this.props.targetVersions) }),
       },
     );
 

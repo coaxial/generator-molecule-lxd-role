@@ -6,10 +6,57 @@ const {
   capitalize,
   listPlatforms,
   listVersions,
+  moleculePlatforms,
   parseDeps,
 } = require('../generators/helpers');
 
 describe('helpers', () => {
+  describe('#moleculePlatforms', () => {
+    it('formats the list correctly', () => {
+      const versions = [
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'trusty',
+          versionNumber: '14.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'xenial',
+          versionNumber: '16.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'bionic',
+          versionNumber: '18.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'debian',
+          codeName: 'jessie',
+          versionNumber: '8',
+          tags: ['current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'debian',
+          codeName: 'stretch',
+          versionNumber: '9',
+          tags: ['lts'],
+        },
+      ];
+
+      const actual = moleculePlatforms(versions);
+
+      expect(actual).toMatchSnapshot();
+    });
+  });
+
   describe('#listVersions', () => {
     it('returns the list of versions', () => {
       const actual = listVersions(['UBUNTU', 'DEBIAN']);

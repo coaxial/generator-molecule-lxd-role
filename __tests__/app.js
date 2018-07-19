@@ -362,4 +362,41 @@ describe('generator-molecule-lxd-role:app', () => {
       });
     });
   });
+
+  describe('when targetting another distribution than Ubuntu', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.targetDistributions = ['DEBIAN'];
+    clonedResponses.targetVersions = [
+      {
+        family: 'debian',
+        distribution: 'debian',
+        codeName: 'jessie',
+        versionNumber: '8',
+        tags: ['current'],
+      },
+      {
+        family: 'debian',
+        distribution: 'debian',
+        codeName: 'stretch',
+        versionNumber: '9',
+        tags: ['lts'],
+      },
+    ];
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
+    describe('molecule/default/molecule.yml', () => {
+      const filePath = 'molecule/default/molecule.yml';
+
+      it('formats the platform list properly', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+  });
 });

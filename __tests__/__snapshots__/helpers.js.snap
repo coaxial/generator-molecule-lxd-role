@@ -94,3 +94,28 @@ Array [
   },
 ]
 `;
+
+exports[`helpers #moleculePlatforms formats the list correctly 1`] = `
+Array [
+  Object {
+    "alias": "ubuntu:14.04",
+    "name": "ubuntu_trusty",
+  },
+  Object {
+    "alias": "ubuntu:16.04",
+    "name": "ubuntu_xenial",
+  },
+  Object {
+    "alias": "ubuntu:18.04",
+    "name": "ubuntu_bionic",
+  },
+  Object {
+    "alias": "images:debian/8",
+    "name": "debian_jessie",
+  },
+  Object {
+    "alias": "images:debian/9",
+    "name": "debian_stretch",
+  },
+]
+`;

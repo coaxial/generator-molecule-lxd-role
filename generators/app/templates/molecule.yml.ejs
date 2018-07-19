@@ -5,11 +5,7 @@ driver:
   name: lxd
 lint:
   name: yamllint
-platforms:
-<% targetVersions.forEach(version => { -%>
-<%-`  - name: ${version.codeName}` %>
-<%-`    alias: images:${version.distribution}/${version.codeName}` %>
-<% }) -%>
+<%- platforms %>
 provisioner:
   name: ansible
   playbooks:
