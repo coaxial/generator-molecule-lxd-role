@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not, toUpper } = require('ramda');
+const { either, forEach, isEmpty, isNil, not, split, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -127,6 +127,7 @@ module.exports = class extends Generator {
         message: `Which Galaxy tags to give the role? ${chalk.reset.gray.italic(
           '(optional; single words, comma separated)',
         )}`,
+        filter: answer => split(', ', answer),
         default: [],
       },
       {
