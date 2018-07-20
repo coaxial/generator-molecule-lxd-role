@@ -51,11 +51,11 @@ License
 Author Information
 ------------------
 
-<% if (typeof authorOrganization === 'undefined' && typeof authorWebsite === 'undefined') { -%>
+<% if (authorOrganization === '' && authorWebsite === '') { -%>
 <%- authorName %>
-<% } else if (typeof authorOrganization === 'undefined' && typeof authorWebsite !== 'undefined') { -%>
+<% } else if (authorOrganization === '' && typeof authorWebsite !== 'undefined') { -%>
 <%- `${authorName} ([${authorWebsite}](${authorWebsite}))` %>
-<% } else if (typeof authorOrganization !== 'undefined' && typeof authorWebsite === 'undefined') { %>
+<% } else if (authorOrganization !== '' && authorWebsite === '') { %>
 <%- `${authorName} (${authorOrganization})` %>
 <% } else { -%>
 <%- `${authorName} ([${authorOrganization}](${authorWebsite}))` -%>

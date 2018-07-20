@@ -60,6 +60,7 @@ module.exports = class extends Generator {
           '(optional)',
         )}`,
         store: true,
+        default: '',
       },
       {
         type: 'input',
@@ -68,6 +69,7 @@ module.exports = class extends Generator {
           '(optional)',
         )}`,
         store: true,
+        default: '',
       },
       {
         type: 'input',

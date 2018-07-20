@@ -543,6 +543,78 @@ galaxy_info:
 "
 `;
 
+exports[`generator-molecule-lxd-role:app when there is no organization or website README.md formats the author information properly 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no organization or website meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
 exports[`generator-molecule-lxd-role:app when there is no website README.md formats the author information properly 1`] = `
 "Test role
 =========

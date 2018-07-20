@@ -256,9 +256,37 @@ describe('generator-molecule-lxd-role:app', () => {
     });
   });
 
+  describe('when there is no organization or website', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.authorOrganization = '';
+    clonedResponses.authorWebsite = '';
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
+    describe('README.md', () => {
+      it('formats the author information properly', () => {
+        const actual = readFileSync('README.md', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('meta/main.yml', () => {
+      it('formats the metadata properly', () => {
+        const actual = readFileSync('meta/main.yml', 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+  });
+
   describe('when there is no organization', () => {
     const clonedResponses = clone(defaultResponses);
-    clonedResponses.authorOrganization = undefined;
+    clonedResponses.authorOrganization = '';
 
     beforeAll(() => {
       return helpers
@@ -285,7 +313,7 @@ describe('generator-molecule-lxd-role:app', () => {
 
   describe('when there is no website', () => {
     const clonedResponses = clone(defaultResponses);
-    clonedResponses.authorWebsite = undefined;
+    clonedResponses.authorWebsite = '';
 
     beforeAll(() => {
       return helpers
