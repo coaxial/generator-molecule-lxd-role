@@ -1,5 +1,15 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, map, not, split, toUpper } = require('ramda');
+const {
+  either,
+  forEach,
+  isEmpty,
+  isNil,
+  map,
+  not,
+  prop,
+  split,
+  toUpper,
+} = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -92,10 +102,7 @@ module.exports = class extends Generator {
         message: `Which versions does this role support? ${chalk.reset.gray.italic(
           'Are the versions outdated? File an issue here: ' + URLS.ISSUES,
         )}`,
-        choices: answers => {
-          console.log({ answers });
-          return listVersions(answers.targetDistributions);
-        },
+        choices: answers => listVersions(prop('targetDistributions', answers)),
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
       },

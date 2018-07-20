@@ -240,7 +240,7 @@ exports[`generator-molecule-lxd-role:app when all the prompts have answers molec
 - name: Converge
   hosts: all
   roles:
-      - name: test-role
+    - name: test-role
 "
 `;
 

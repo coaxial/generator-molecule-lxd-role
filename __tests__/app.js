@@ -435,7 +435,7 @@ describe('generator-molecule-lxd-role:app', () => {
 
   describe('when there are no galaxy tags', () => {
     const clonedResponses = clone(defaultResponses);
-    clonedResponses.galaxyTags = '';
+    clonedResponses.galaxyTags = [];
 
     beforeAll(() => {
       return helpers
