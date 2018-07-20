@@ -1,0 +1,156 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`helpers #indent accepts an object containing an empty array 1`] = `
+"  heyo: []
+"
+`;
+
+exports[`helpers #indent works on serialized multiline text within a string 1`] = `
+"    indent: me
+    and: me too
+"
+`;
+
+exports[`helpers #listPlatforms returns the list of platforms 1`] = `
+Array [
+  "Ubuntu",
+  "Debian",
+]
+`;
+
+exports[`helpers #listVersions returns the list of versions 1`] = `
+Array [
+  Separator {
+    "line": "[2m↓  Ubuntu ↓ [22m",
+    "type": "separator",
+  },
+  Object {
+    "name": "14.04",
+    "value": Object {
+      "codeName": "trusty",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "14.04",
+    },
+  },
+  Object {
+    "name": "16.04",
+    "value": Object {
+      "codeName": "xenial",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "16.04",
+    },
+  },
+  Object {
+    "name": "18.04",
+    "value": Object {
+      "codeName": "bionic",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "18.04",
+    },
+  },
+  Object {
+    "name": "18.10",
+    "value": Object {
+      "codeName": "cosmic",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "18.10",
+    },
+  },
+  Separator {
+    "line": "[2m↓  Debian ↓ [22m",
+    "type": "separator",
+  },
+  Object {
+    "name": "8",
+    "value": Object {
+      "codeName": "jessie",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "current",
+      ],
+      "versionNumber": "8",
+    },
+  },
+  Object {
+    "name": "9",
+    "value": Object {
+      "codeName": "stretch",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+      ],
+      "versionNumber": "9",
+    },
+  },
+  Object {
+    "name": "testing",
+    "value": Object {
+      "codeName": "buster",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "testing",
+    },
+  },
+  Object {
+    "name": "unstable",
+    "value": Object {
+      "codeName": "sid",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "unstable",
+    },
+  },
+]
+`;
+
+exports[`helpers #moleculePlatforms formats the list correctly 1`] = `
+Array [
+  Object {
+    "alias": "ubuntu:14.04",
+    "name": "ubuntu_trusty",
+  },
+  Object {
+    "alias": "ubuntu:16.04",
+    "name": "ubuntu_xenial",
+  },
+  Object {
+    "alias": "ubuntu:18.04",
+    "name": "ubuntu_bionic",
+  },
+  Object {
+    "alias": "images:debian/8",
+    "name": "debian_jessie",
+  },
+  Object {
+    "alias": "images:debian/9",
+    "name": "debian_stretch",
+  },
+]
+`;

@@ -1,0 +1,62 @@
+<%- roleName %>
+=========
+<% if (useTravis) { -%>
+  [![Build Status](https://travis-ci.org/<%- travisUsername -%>/<%- repoName -%>.svg?branch=master)](https://travis-ci.org/<%- travisUsername -%>/<%- repoName -%>)
+<% } -%>
+
+<%- roleDesc %>
+
+<% if(hasReqs) { -%>
+Requirements
+------------
+
+<%- roleReqs %>
+
+<% } -%>
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+`example_variable` | `true` | `true` or `false` | This is an example to populate the table.
+
+<% if(hasDeps) { -%>
+Dependencies
+------------
+
+<% roleDeps.forEach(dep => { -%>
+<%- `- ${dep}` %>
+<% }); -%>
+<% } -%>
+
+Example Playbook
+----------------
+
+```yaml
+- hosts: all
+  roles:
+<% if(hasDeps) { -%>
+<% roleDeps.forEach(dep => { -%>
+    <%- `- ${dep}` %>
+<% }); -%>
+<% } -%>
+    - <%- roleNameExample %>
+```
+
+License
+-------
+
+<%- license %>
+
+Author Information
+------------------
+
+<% if (authorOrganization === '' && authorWebsite === '') { -%>
+<%- authorName %>
+<% } else if (authorOrganization === '' && typeof authorWebsite !== 'undefined') { -%>
+<%- `${authorName} ([${authorWebsite}](${authorWebsite}))` %>
+<% } else if (authorOrganization !== '' && authorWebsite === '') { %>
+<%- `${authorName} (${authorOrganization})` %>
+<% } else { -%>
+<%- `${authorName} ([${authorOrganization}](${authorWebsite}))` -%>
+<% } -%>

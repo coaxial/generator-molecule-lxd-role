@@ -1,0 +1,690 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator-molecule-lxd-role:app when Travis disabled README.md skips the badge 1`] = `
+"Test role
+=========
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([Test organization](https://example.org))"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers .gitignore is correctly formatted 1`] = `
+"*.pyc
+*.log
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers .travis.yml is correctly formatted 1`] = `
+"---
+jobs:
+  include:
+    - &test
+      stage: test
+      language: python
+      python: \\"2.7\\"
+      cache: pip
+      dist: xenial
+      sudo: required
+      install:
+        - .travis/setup.sh
+      script:
+        # the python venv needs to be in the path for molecule to run
+        # https://unix.stackexchange.com/questions/83191/how-to-make-sudo-preserve-path
+        - sudo env \\"PATH=$PATH\\" molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers .travis/setup.sh is correctly formatted 1`] = `
+"#!/bin/sh
+sudo apt-get update
+# xenial ships LXD 2 LTS, backports ships 3 LTS
+sudo apt-get upgrade -t xenial-backports -y lxd lxd-client
+
+sudo lxd --version
+# Wait for the socket to be ready
+sudo lxd waitready
+sudo lxd init --auto
+
+pip install ansible
+pip install molecule
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers README.md is correctly formatted 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([Test organization](https://example.org))"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers defaults/main.yml is correctly formatted 1`] = `
+"---
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers handlers/main.yml is correctly formatted 1`] = `
+"---
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers meta/main.yml is correctly formatted 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers molecule/create.yml is correctly formatted 1`] = `
+"---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: \\"{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}\\"
+  tasks:
+    - name: Create molecule instance(s)
+      lxd_container:
+        name: \\"{{ item.name }}\\"
+        state: started
+        source:
+          type: image
+          mode: pull
+          server: https://images.linuxcontainers.org
+          protocol: lxd
+          alias: \\"{{ item.alias }}/amd64\\"
+        profiles: [\\"default\\"]
+        wait_for_ipv4_addresses: true
+        timeout: 600
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+
+    - name: Install Python in container
+      delegate_to: \\"{{ item.name }}\\"
+      raw: apt-get install -y python
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers molecule/default/molecule.yml is correctly formatted 1`] = `
+"---
+dependency:
+  name: galaxy
+driver:
+  name: lxd
+lint:
+  name: yamllint
+platforms:
+  - name: ubuntu_trusty
+    alias: 'ubuntu:14.04'
+  - name: ubuntu_xenial
+    alias: 'ubuntu:16.04'
+  - name: ubuntu_bionic
+    alias: 'ubuntu:18.04'
+
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../create.yml
+    destroy: ../destroy.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers molecule/default/playbook.yml is correctly formatted 1`] = `
+"---
+- name: Converge
+  hosts: all
+  roles:
+    - name: test-role
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers molecule/default/tests/test_default.py is correctly formatted 1`] = `
+"import os
+
+import testinfra.utils.ansible_runner
+
+testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
+
+
+def test_example(host):
+    file = host.file('/etc/hosts')
+
+    assert file.exists
+    assert file.user == 'root'
+    assert file.group == 'root'
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers molecule/destroy.yml is correctly formatted 1`] = `
+"---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: \\"{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}\\"
+  tasks:
+    - name: Destroy molecule instance(s)
+      lxd_container:
+        name: \\"{{ item.name }}\\"
+        state: absent
+        force_stop: \\"{{ item.force_stop | default(true) }}\\"
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers tasks/main.yml is correctly formatted 1`] = `
+"---
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when all the prompts have answers vars/main.yml is correctly formatted 1`] = `
+"---
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when targetting another distribution than Ubuntu molecule/default/molecule.yml formats the platform list properly 1`] = `
+"---
+dependency:
+  name: galaxy
+driver:
+  name: lxd
+lint:
+  name: yamllint
+platforms:
+  - name: debian_jessie
+    alias: 'images:debian/8'
+  - name: debian_stretch
+    alias: 'images:debian/9'
+
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../create.yml
+    destroy: ../destroy.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there are no dependencies README.md skips the dependencies section 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([Test organization](https://example.org))"
+`;
+
+exports[`generator-molecule-lxd-role:app when there are no dependencies meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies: []
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there are no galaxy tags meta/main.yml is correctly formatted 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags: []
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there are no requirements README.md skips the requirents section 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([Test organization](https://example.org))"
+`;
+
+exports[`generator-molecule-lxd-role:app when there are no requirements meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no organization README.md formats the author information properly 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([https://example.org](https://example.org))
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no organization meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no organization or website README.md formats the author information properly 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no organization or website meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no website README.md formats the author information properly 1`] = `
+"Test role
+=========
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - role
+    - username.myrole
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+
+Test author (Test organization)
+"
+`;
+
+exports[`generator-molecule-lxd-role:app when there is no website meta/main.yml formats the metadata properly 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;

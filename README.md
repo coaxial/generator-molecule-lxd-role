@@ -1,4 +1,5 @@
-# generator-molecule-lxd-role [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
+# generator-molecule-lxd-role
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > Ansible role testing with molecule using LXD instead of Docker
 
 ## Installation
@@ -25,7 +26,7 @@ yo molecule-lxd-role
 
 ## License
 
-BSD-3-Clause © [coaxial](https://64b.it)
+MIT © [coaxial](https://64b.it)
 
 
 [npm-image]: https://badge.fury.io/js/generator-molecule-lxd-role.svg

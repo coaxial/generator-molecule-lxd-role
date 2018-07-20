@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  author: <%- authorName %>
+  description: <%- roleDesc %>
+<% if(authorOrganization !== '') { -%>
+  company: <%- authorOrganization %>
+<% } -%>
+  license: <%- license %>
+  min_ansible_version: <%- minAnsibleVer %>
+  platforms:
+<% targetVersions.forEach((v, index) => { -%>
+<% if(index === 0) { -%>
+    - name: <%- v.distribution %>
+      versions:
+<% } -%>
+        - <%- v.codeName %>
+<% }) -%>
+<%- galaxyTags %>
+<% if(hasDeps) { -%>
+  dependencies:
+<% roleDeps.forEach(dep => { -%>
+    - { role: <%- dep %> }
+<% }) -%>
+<% } else { -%>
+  dependencies: []
+<% } -%>
