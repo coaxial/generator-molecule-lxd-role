@@ -22,6 +22,8 @@ describe('generator-molecule-lxd-role:app', () => {
     authorWebsite: 'https://example.org',
     minAnsibleVer: '2.4',
     targetDistributions: ['UBUNTU'],
+    useTravis: true,
+    travisUsername: 'test-travis-username',
     targetVersions: [
       {
         family: 'debian',
@@ -396,6 +398,36 @@ describe('generator-molecule-lxd-role:app', () => {
         const actual = readFileSync(filePath, 'utf8');
 
         expect(actual).toMatchSnapshot();
+      });
+    });
+  });
+
+  describe('when Travis disabled', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.useTravis = false;
+    clonedResponses.travisUsername = undefined;
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
+    describe('README.md', () => {
+      const filePath = 'README.md';
+
+      it('skips the badge', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('.travis.yml', () => {
+      const filePath = '.travis.yml';
+
+      it('does not exist', () => {
+        assert.noFile(filePath);
       });
     });
   });

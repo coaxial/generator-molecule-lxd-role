@@ -1,5 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`generator-molecule-lxd-role:app when Travis disabled README.md skips the badge 1`] = `
+"Test role
+=========
+
+This is a test description for the role.
+
+Requirements
+------------
+
+This role makes some assumptions.
+
+Role Variables
+--------------
+
+Name | Default | Possible values | Description
+---|---|---|---
+\`example_variable\` | \`true\` | \`true\` or \`false\` | This is an example to populate the table.
+
+Dependencies
+------------
+
+- role
+- username.myrole
+
+Example Playbook
+----------------
+
+\`\`\`yaml
+- hosts: all
+  roles:
+    - test-role
+\`\`\`
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+Test author ([Test organization](https://example.org))"
+`;
+
 exports[`generator-molecule-lxd-role:app when all the prompts have answers .gitignore is correctly formatted 1`] = `
 "*.pyc
 *.log
@@ -48,7 +92,7 @@ pip install molecule
 exports[`generator-molecule-lxd-role:app when all the prompts have answers README.md is correctly formatted 1`] = `
 "Test role
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
 
 This is a test description for the role.
 
@@ -270,7 +314,7 @@ verifier:
 exports[`generator-molecule-lxd-role:app when there are no dependencies README.md skips the dependencies section 1`] = `
 "Test role
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
 
 This is a test description for the role.
 
@@ -329,7 +373,7 @@ galaxy_info:
 exports[`generator-molecule-lxd-role:app when there are no requirements README.md skips the requirents section 1`] = `
 "Test role
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
 
 This is a test description for the role.
 
@@ -390,7 +434,7 @@ galaxy_info:
 exports[`generator-molecule-lxd-role:app when there is no organization README.md formats the author information properly 1`] = `
 "Test role
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
 
 This is a test description for the role.
 
@@ -456,7 +500,7 @@ galaxy_info:
 exports[`generator-molecule-lxd-role:app when there is no website README.md formats the author information properly 1`] = `
 "Test role
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+  [![Build Status](https://travis-ci.org/test-travis-username/ansible-role-test-role.svg?branch=master)](https://travis-ci.org/test-travis-username/ansible-role-test-role)
 
 This is a test description for the role.
 

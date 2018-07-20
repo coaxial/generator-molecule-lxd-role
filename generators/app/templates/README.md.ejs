@@ -1,6 +1,8 @@
 <%- roleName %>
 =========
-[![Build Status](https://travis-ci.org/coaxial/ansible-role-lxd.svg?branch=master)](https://travis-ci.org/coaxial/ansible-role-lxd)
+<% if (useTravis) { -%>
+  [![Build Status](https://travis-ci.org/<%- travisUsername -%>/<%- repoName -%>.svg?branch=master)](https://travis-ci.org/<%- travisUsername -%>/<%- repoName -%>)
+<% } -%>
 
 <%- roleDesc %>
 

@@ -166,7 +166,8 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    const destinationPath = this.props.repoName;
+    const p = this.props;
+    const destinationPath = p.repoName;
 
     // Create role directory if it doesn't already exist and set it as the root
     if (path.basename(this.destinationPath()) !== destinationPath) {
@@ -194,17 +195,20 @@ module.exports = class extends Generator {
       this.templatePath('README.md.ejs'),
       this.destinationPath('README.md'),
       {
-        authorName: this.props.authorName,
-        authorOrganization: this.props.authorOrganization,
-        authorWebsite: this.props.authorWebsite,
-        hasDeps: this.props.hasDeps,
-        hasReqs: this.props.hasReqs,
-        license: this.props.license,
-        roleDeps: parseDeps(this.props.roleDeps),
-        roleDesc: this.props.roleDesc,
-        roleName: this.props.roleName,
-        roleNameExample: paramCase(this.props.roleName),
-        roleReqs: this.props.roleReqs,
+        authorName: p.authorName,
+        authorOrganization: p.authorOrganization,
+        authorWebsite: p.authorWebsite,
+        hasDeps: p.hasDeps,
+        hasReqs: p.hasReqs,
+        license: p.license,
+        repoName: p.repoName,
+        roleDeps: parseDeps(p.roleDeps),
+        roleDesc: p.roleDesc,
+        roleName: p.roleName,
+        roleNameExample: paramCase(p.roleName),
+        roleReqs: p.roleReqs,
+        useTravis: p.useTravis,
+        travisUsername: p.travisUsername,
       },
     );
 
@@ -224,14 +228,14 @@ module.exports = class extends Generator {
       this.templatePath('molecule.yml.ejs'),
       this.destinationPath('molecule/default/molecule.yml'),
       {
-        platforms: safeDump({ platforms: moleculePlatforms(this.props.targetVersions) }),
+        platforms: safeDump({ platforms: moleculePlatforms(p.targetVersions) }),
       },
     );
 
     this.fs.copyTpl(
       this.templatePath('playbook.yml.ejs'),
       this.destinationPath('molecule/default/playbook.yml'),
-      { roleName: paramCase(this.props.roleName) },
+      { roleName: paramCase(p.roleName) },
     );
 
     this.fs.copy(
@@ -253,21 +257,23 @@ module.exports = class extends Generator {
       this.templatePath('meta_main.yml.ejs'),
       this.destinationPath('meta/main.yml'),
       {
-        authorName: this.props.authorName,
-        authorOrganization: this.props.authorOrganization,
-        hasDeps: this.props.hasDeps,
-        license: this.props.license,
-        minAnsibleVer: this.props.minAnsibleVer,
-        platforms: this.props.supportedPlatforms,
-        roleDeps: parseDeps(this.props.roleDeps),
-        roleDesc: this.props.roleDesc,
-        targetVersions: this.props.targetVersions,
+        authorName: p.authorName,
+        authorOrganization: p.authorOrganization,
+        hasDeps: p.hasDeps,
+        license: p.license,
+        minAnsibleVer: p.minAnsibleVer,
+        platforms: p.supportedPlatforms,
+        roleDeps: parseDeps(p.roleDeps),
+        roleDesc: p.roleDesc,
+        targetVersions: p.targetVersions,
       },
     );
 
     this.fs.copy(this.templatePath('setup.sh'), this.destinationPath('.travis/setup.sh'));
 
-    this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
+    if (p.useTravis) {
+      this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
+    }
   }
 
   install() {
