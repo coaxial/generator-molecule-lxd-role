@@ -3,4 +3,8 @@ language: node_js
 node_js:
   - v10
   - v8
-after_script: cat ./coverage/lcov.info | coveralls
+jobs:
+  include:
+    - stage: Produce Coverage
+      node_js: node
+      script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
