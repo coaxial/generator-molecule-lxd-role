@@ -21,8 +21,8 @@ const {
   unless,
   unnest,
 } = require('ramda');
+const { safeLoad } = require('js-yaml');
 const { snakeCase } = require('change-case');
-const jsyaml = require('js-yaml');
 
 const { basename } = require('path');
 
@@ -78,7 +78,7 @@ const parseDeps = unless(
   either(isEmpty, isNil),
   compose(
     nameOrSrc,
-    jsyaml.load,
+    safeLoad,
   ),
 );
 const listPlatforms = compose(
