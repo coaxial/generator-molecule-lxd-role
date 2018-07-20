@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not, pipe, toUpper } = require('ramda');
+const { either, forEach, isEmpty, isNil, not, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -10,7 +10,7 @@ const path = require('path');
 
 const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
 const {
-  indent,
+  indentYaml,
   listPlatforms,
   listVersions,
   moleculePlatforms,
@@ -261,11 +261,8 @@ module.exports = class extends Generator {
       {
         authorName: p.authorName,
         authorOrganization: p.authorOrganization,
-        galaxyTags: pipe(
-          safeDump,
-          indent(2),
-          // eslint-disable-next-line
-        )({ galaxy_tags: p.galaxyTags }),
+        // eslint-disable-next-line camelcase
+        galaxyTags: indentYaml(2, { galaxy_tags: p.galaxyTags }),
         hasDeps: p.hasDeps,
         license: p.license,
         minAnsibleVer: p.minAnsibleVer,

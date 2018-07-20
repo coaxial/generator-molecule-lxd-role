@@ -25,7 +25,7 @@ const {
   unless,
   unnest,
 } = require('ramda');
-const { safeLoad } = require('js-yaml');
+const { safeDump, safeLoad } = require('js-yaml');
 const { snakeCase } = require('change-case');
 
 const { basename } = require('path');
@@ -111,6 +111,13 @@ const indent = curry((count, string) => {
   )(string);
 });
 
+const indentYaml = curry((count, yaml) =>
+  pipe(
+    safeDump,
+    indent(count),
+  )(yaml),
+);
+
 module.exports = {
   listPlatforms,
   capitalize,
@@ -118,4 +125,5 @@ module.exports = {
   listVersions,
   moleculePlatforms,
   indent,
+  indentYaml,
 };

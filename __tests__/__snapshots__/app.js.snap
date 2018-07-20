@@ -162,7 +162,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-  galaxy_tags: []
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
   dependencies:
     - { role: role }
     - { role: username.myrole }
@@ -369,7 +373,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-  galaxy_tags: []
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
   dependencies: []
 "
 `;
@@ -389,6 +397,7 @@ galaxy_info:
         - xenial
         - bionic
   galaxy_tags: []
+
   dependencies:
     - { role: role }
     - { role: username.myrole }
@@ -451,7 +460,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-  galaxy_tags: []
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
   dependencies:
     - { role: role }
     - { role: username.myrole }
@@ -519,7 +532,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-  galaxy_tags: []
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
   dependencies:
     - { role: role }
     - { role: username.myrole }
@@ -589,7 +606,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
-  galaxy_tags: []
+  galaxy_tags:
+    - test
+    - system
+    - linux
+
   dependencies:
     - { role: role }
     - { role: username.myrole }
