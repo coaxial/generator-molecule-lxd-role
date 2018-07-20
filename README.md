@@ -2,6 +2,23 @@
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
 > Ansible role testing with molecule using LXD instead of Docker
 
+This Yeoman generator will create a new Ansible role with the necessary
+configuration to test it using
+[Molecule](https://molecule.readthedocs.io/en/latest/) on Travis CI (optional).
+It will run the Molecule tests using LXD containers instead of Docker
+containers.
+
+## Why LXD instead of Docker
+
+LXD containers run a full system including an init system out of the box and
+are extremely close to the actual metal or VM hosts usually targetted by
+Ansible. I find LXD containers much better suited at testing Ansible roles,
+rather than shoe-horning additional systems into a Docker container to simulate
+a real host.
+
+LXD is more like a VM but with a container footprint. It's based on LXC and
+it's great. To learn more, see [the official website](http://linuxcontainers.org/).
+
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-molecule-lxd-role using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
@@ -16,6 +33,43 @@ Then generate your new project:
 ```bash
 yo molecule-lxd-role
 ```
+
+## What will the folder structure look like
+
+```
+.
+├── defaults
+│   └── main.yml
+├── files
+├── .gitignore
+├── handlers
+│   └── main.yml
+├── meta
+│   └── main.yml
+├── molecule
+│   ├── create.yml
+│   ├── default
+│   │   ├── molecule.yml
+│   │   ├── playbook.yml
+│   │   └── tests
+│   │       └── test_default.py
+│   └── destroy.yml
+├── README.md
+├── tasks
+│   └── main.yml
+├── templates
+├── .travis
+│   └── setup.sh
+├── .travis.yml
+└── vars
+    └── main.yml
+
+11 directories, 14 files
+```
+
+## Issues
+
+Open an issue on this repo. Questions are welcome too.
 
 ## Getting To Know Yeoman
 
