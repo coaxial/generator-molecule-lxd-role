@@ -79,5 +79,5 @@
     "plugins": ["prettier"]
   },
   "repository": "coaxial/generator-molecule-lxd-role",
-  "license": "BSD-3-Clause"
+  "license": "MIT"
 }
