@@ -26,7 +26,7 @@ yo molecule-lxd-role
 
 ## License
 
-BSD-3-Clause © [coaxial](https://64b.it)
+MIT © [coaxial](https://64b.it)
 
 
 [npm-image]: https://badge.fury.io/js/generator-molecule-lxd-role.svg
