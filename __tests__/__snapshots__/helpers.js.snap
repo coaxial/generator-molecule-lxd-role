@@ -25,83 +25,107 @@ Array [
     "type": "separator",
   },
   Object {
-    "codeName": "trusty",
-    "distribution": "ubuntu",
-    "family": "debian",
-    "tags": Array [
-      "lts",
-      "current",
-    ],
-    "versionNumber": "14.04",
+    "name": "14.04",
+    "value": Object {
+      "codeName": "trusty",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "14.04",
+    },
   },
   Object {
-    "codeName": "xenial",
-    "distribution": "ubuntu",
-    "family": "debian",
-    "tags": Array [
-      "lts",
-      "current",
-    ],
-    "versionNumber": "16.04",
+    "name": "16.04",
+    "value": Object {
+      "codeName": "xenial",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "16.04",
+    },
   },
   Object {
-    "codeName": "bionic",
-    "distribution": "ubuntu",
-    "family": "debian",
-    "tags": Array [
-      "lts",
-      "current",
-    ],
-    "versionNumber": "18.04",
+    "name": "18.04",
+    "value": Object {
+      "codeName": "bionic",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+        "current",
+      ],
+      "versionNumber": "18.04",
+    },
   },
   Object {
-    "codeName": "cosmic",
-    "distribution": "ubuntu",
-    "family": "debian",
-    "tags": Array [
-      "future",
-    ],
-    "versionNumber": "18.10",
+    "name": "18.10",
+    "value": Object {
+      "codeName": "cosmic",
+      "distribution": "ubuntu",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "18.10",
+    },
   },
   Separator {
     "line": "[2m↓  Debian ↓ [22m",
     "type": "separator",
   },
   Object {
-    "codeName": "jessie",
-    "distribution": "debian",
-    "family": "debian",
-    "tags": Array [
-      "current",
-    ],
-    "versionNumber": "8",
+    "name": "8",
+    "value": Object {
+      "codeName": "jessie",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "current",
+      ],
+      "versionNumber": "8",
+    },
   },
   Object {
-    "codeName": "stretch",
-    "distribution": "debian",
-    "family": "debian",
-    "tags": Array [
-      "lts",
-    ],
-    "versionNumber": "9",
+    "name": "9",
+    "value": Object {
+      "codeName": "stretch",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "lts",
+      ],
+      "versionNumber": "9",
+    },
   },
   Object {
-    "codeName": "buster",
-    "distribution": "debian",
-    "family": "debian",
-    "tags": Array [
-      "future",
-    ],
-    "versionNumber": "testing",
+    "name": "testing",
+    "value": Object {
+      "codeName": "buster",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "testing",
+    },
   },
   Object {
-    "codeName": "sid",
-    "distribution": "debian",
-    "family": "debian",
-    "tags": Array [
-      "future",
-    ],
-    "versionNumber": "unstable",
+    "name": "unstable",
+    "value": Object {
+      "codeName": "sid",
+      "distribution": "debian",
+      "family": "debian",
+      "tags": Array [
+        "future",
+      ],
+      "versionNumber": "unstable",
+    },
   },
 ]
 `;

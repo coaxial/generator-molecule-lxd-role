@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not, split, toUpper } = require('ramda');
+const { either, forEach, isEmpty, isNil, map, not, split, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -84,7 +84,7 @@ module.exports = class extends Generator {
         choices: listPlatforms(PLATFORMS),
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
-        filter: toUpper,
+        filter: map(toUpper),
       },
       {
         type: 'checkbox',
@@ -92,7 +92,10 @@ module.exports = class extends Generator {
         message: `Which versions does this role support? ${chalk.reset.gray.italic(
           'Are the versions outdated? File an issue here: ' + URLS.ISSUES,
         )}`,
-        choices: answers => listVersions(answers.targetDistributions),
+        choices: answers => {
+          console.log({ answers });
+          return listVersions(answers.targetDistributions);
+        },
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
       },
@@ -128,7 +131,7 @@ module.exports = class extends Generator {
           '(optional; single words, comma separated)',
         )}`,
         filter: answer => split(', ', answer),
-        default: [],
+        default: '',
       },
       {
         type: 'confirm',
@@ -279,9 +282,5 @@ module.exports = class extends Generator {
     if (p.useTravis) {
       this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
     }
-  }
-
-  install() {
-    this.installDependencies();
   }
 };

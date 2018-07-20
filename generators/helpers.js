@@ -59,8 +59,22 @@ const nameOrSrc = curry(deps => {
   return map(name, deps);
 });
 const separator = label => new Separator(`↓  ${capitalize(label)} ↓ `);
+const platformsToChoices = platformName => {
+  const platforms = prop(platformName, PLATFORMS);
+
+  return unnest(
+    map(
+      p => ({
+        name: prop('versionNumber', p),
+        value: p,
+      }),
+      platforms,
+    ),
+  );
+};
+
 const versions = platformName =>
-  insert(0, separator(toLower(platformName)), prop(platformName, PLATFORMS));
+  insert(0, separator(toLower(platformName)), platformsToChoices(platformName));
 
 const generateListForVersions = map(version => {
   const isUbuntu = propEq('distribution', 'ubuntu');
