@@ -1,6 +1,5 @@
 # generator-molecule-lxd-role
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage percentage][coveralls-image]][coveralls-url]
-> Ansible role testing with molecule using LXD instead of Docker
 
 This Yeoman generator will create a new Ansible role with the necessary
 configuration to test it using
