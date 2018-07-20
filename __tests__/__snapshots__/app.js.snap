@@ -30,6 +30,8 @@ Example Playbook
 \`\`\`yaml
 - hosts: all
   roles:
+    - role
+    - username.myrole
     - test-role
 \`\`\`
 
@@ -120,6 +122,8 @@ Example Playbook
 \`\`\`yaml
 - hosts: all
   roles:
+    - role
+    - username.myrole
     - test-role
 \`\`\`
 
@@ -370,6 +374,27 @@ galaxy_info:
 "
 `;
 
+exports[`generator-molecule-lxd-role:app when there are no galaxy tags meta/main.yml is correctly formatted 1`] = `
+"---
+galaxy_info:
+  author: Test author
+  description: This is a test description for the role.
+  company: Test organization
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+    - name: ubuntu
+      versions:
+        - trusty
+        - xenial
+        - bionic
+  galaxy_tags: []
+  dependencies:
+    - { role: role }
+    - { role: username.myrole }
+"
+`;
+
 exports[`generator-molecule-lxd-role:app when there are no requirements README.md skips the requirents section 1`] = `
 "Test role
 =========
@@ -396,6 +421,8 @@ Example Playbook
 \`\`\`yaml
 - hosts: all
   roles:
+    - role
+    - username.myrole
     - test-role
 \`\`\`
 
@@ -462,6 +489,8 @@ Example Playbook
 \`\`\`yaml
 - hosts: all
   roles:
+    - role
+    - username.myrole
     - test-role
 \`\`\`
 
@@ -528,6 +557,8 @@ Example Playbook
 \`\`\`yaml
 - hosts: all
   roles:
+    - role
+    - username.myrole
     - test-role
 \`\`\`
 

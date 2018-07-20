@@ -2,8 +2,10 @@
 const assert = require('yeoman-assert');
 
 const { PLATFORMS } = require('../generators/constants');
+const { safeDump } = require('js-yaml');
 const {
   capitalize,
+  indent,
   listPlatforms,
   listVersions,
   moleculePlatforms,
@@ -11,6 +13,24 @@ const {
 } = require('../generators/helpers');
 
 describe('helpers', () => {
+  describe('#indent', () => {
+    it('works on serialized multiline text within a string', () => {
+      const yaml = safeDump({ indent: 'me', and: 'me too' });
+
+      const actual = indent(4, yaml);
+
+      expect(actual).toMatchSnapshot();
+    });
+
+    it('accepts an object containing an empty array', () => {
+      const yaml = safeDump({ heyo: [] });
+
+      const actual = indent(2, yaml);
+
+      expect(actual).toMatchSnapshot();
+    });
+  });
+
   describe('#moleculePlatforms', () => {
     it('formats the list correctly', () => {
       const versions = [

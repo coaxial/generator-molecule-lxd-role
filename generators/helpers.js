@@ -2,6 +2,7 @@
 const { Separator } = require('inquirer');
 const {
   compose,
+  concat,
   curry,
   either,
   head,
@@ -13,8 +14,11 @@ const {
   juxt,
   keys,
   map,
+  pipe,
   prop,
   propEq,
+  repeat,
+  replace,
   tail,
   toLower,
   toUpper,
@@ -94,10 +98,24 @@ const listVersions = compose(
 
 const moleculePlatforms = generateListForVersions;
 
+const indent = curry((count, string) => {
+  const padding = pipe(
+    repeat(' '),
+    join(''),
+  )(count);
+
+  return pipe(
+    replace(/\n/g, `\n${padding}`),
+    concat(padding),
+    replace(/\s+$/, '\n'),
+  )(string);
+});
+
 module.exports = {
   listPlatforms,
   capitalize,
   parseDeps,
   listVersions,
   moleculePlatforms,
+  indent,
 };

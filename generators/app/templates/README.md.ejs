@@ -35,7 +35,11 @@ Example Playbook
 ```yaml
 - hosts: all
   roles:
-<%  -%>
+<% if(hasDeps) { -%>
+<% roleDeps.forEach(dep => { -%>
+    <%- `- ${dep}` %>
+<% }); -%>
+<% } -%>
     - <%- roleNameExample %>
 ```
 

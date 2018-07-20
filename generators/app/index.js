@@ -1,5 +1,5 @@
 'use strict';
-const { either, forEach, isEmpty, isNil, not, toUpper } = require('ramda');
+const { either, forEach, isEmpty, isNil, not, pipe, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -10,6 +10,7 @@ const path = require('path');
 
 const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
 const {
+  indent,
   listPlatforms,
   listVersions,
   moleculePlatforms,
@@ -126,6 +127,7 @@ module.exports = class extends Generator {
         message: `Which Galaxy tags to give the role? ${chalk.reset.gray.italic(
           '(optional; single words, comma separated)',
         )}`,
+        default: [],
       },
       {
         type: 'confirm',
@@ -259,6 +261,11 @@ module.exports = class extends Generator {
       {
         authorName: p.authorName,
         authorOrganization: p.authorOrganization,
+        galaxyTags: pipe(
+          safeDump,
+          indent(2),
+          // eslint-disable-next-line
+        )({ galaxy_tags: p.galaxyTags }),
         hasDeps: p.hasDeps,
         license: p.license,
         minAnsibleVer: p.minAnsibleVer,

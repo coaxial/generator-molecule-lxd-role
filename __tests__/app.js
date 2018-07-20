@@ -22,6 +22,7 @@ describe('generator-molecule-lxd-role:app', () => {
     authorWebsite: 'https://example.org',
     minAnsibleVer: '2.4',
     targetDistributions: ['UBUNTU'],
+    galaxyTags: ['test', 'system', 'linux'],
     useTravis: true,
     travisUsername: 'test-travis-username',
     targetVersions: [
@@ -428,6 +429,27 @@ describe('generator-molecule-lxd-role:app', () => {
 
       it('does not exist', () => {
         assert.noFile(filePath);
+      });
+    });
+  });
+
+  describe('when there are no galaxy tags', () => {
+    const clonedResponses = clone(defaultResponses);
+    clonedResponses.galaxyTags = [];
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, '../generators/app'))
+        .withPrompts(clonedResponses);
+    });
+
+    describe('meta/main.yml', () => {
+      const filePath = 'meta/main.yml';
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
       });
     });
   });

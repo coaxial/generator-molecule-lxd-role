@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`helpers #indent accepts an object containing an empty array 1`] = `
+"  heyo: []
+"
+`;
+
+exports[`helpers #indent works on serialized multiline text within a string 1`] = `
+"    indent: me
+    and: me too
+"
+`;
+
 exports[`helpers #listPlatforms returns the list of platforms 1`] = `
 Array [
   "Ubuntu",

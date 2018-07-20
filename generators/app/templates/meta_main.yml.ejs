@@ -15,7 +15,7 @@ galaxy_info:
 <% } -%>
         - <%- v.codeName %>
 <% }) -%>
-  galaxy_tags: []
+<%- galaxyTags %>
 <% if(hasDeps) { -%>
   dependencies:
 <% roleDeps.forEach(dep => { -%>
