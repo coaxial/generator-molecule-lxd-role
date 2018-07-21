@@ -133,24 +133,24 @@ Array [
 exports[`helpers #moleculePlatforms formats the list correctly 1`] = `
 Array [
   Object {
-    "alias": "ubuntu:14.04",
-    "name": "ubuntu_trusty",
+    "alias": "ubuntu/trusty",
+    "name": "ubuntu-trusty",
   },
   Object {
-    "alias": "ubuntu:16.04",
-    "name": "ubuntu_xenial",
+    "alias": "ubuntu/xenial",
+    "name": "ubuntu-xenial",
   },
   Object {
-    "alias": "ubuntu:18.04",
-    "name": "ubuntu_bionic",
+    "alias": "ubuntu/bionic",
+    "name": "ubuntu-bionic",
   },
   Object {
-    "alias": "images:debian/8",
-    "name": "debian_jessie",
+    "alias": "debian/jessie",
+    "name": "debian-jessie",
   },
   Object {
-    "alias": "images:debian/9",
-    "name": "debian_stretch",
+    "alias": "debian/stretch",
+    "name": "debian-stretch",
   },
 ]
 `;
