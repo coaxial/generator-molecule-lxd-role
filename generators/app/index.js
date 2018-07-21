@@ -250,7 +250,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('playbook.yml.ejs'),
       this.destinationPath('molecule/default/playbook.yml'),
-      { roleName: paramCase(p.roleName) },
+      { repoName: p.repoName },
     );
 
     this.fs.copy(
