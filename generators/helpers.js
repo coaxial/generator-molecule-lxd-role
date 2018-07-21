@@ -6,7 +6,6 @@ const {
   curry,
   either,
   head,
-  ifElse,
   insert,
   isEmpty,
   isNil,
@@ -16,7 +15,6 @@ const {
   map,
   pipe,
   prop,
-  propEq,
   repeat,
   replace,
   tail,
@@ -25,8 +23,8 @@ const {
   unless,
   unnest,
 } = require('ramda');
+const { paramCase } = require('change-case');
 const { safeDump, safeLoad } = require('js-yaml');
-const { snakeCase } = require('change-case');
 
 const { basename } = require('path');
 
@@ -77,17 +75,12 @@ const versions = platformName =>
   insert(0, separator(toLower(platformName)), platformsToChoices(platformName));
 
 const generateListForVersions = map(version => {
-  const isUbuntu = propEq('distribution', 'ubuntu');
-  const ubuntuFormat = ubuntu => `ubuntu:${prop('versionNumber', ubuntu)}`;
-  const nonUbuntuFormat = notUubntu =>
-    `images:${prop('distribution', notUubntu)}/${prop('versionNumber', notUubntu)}`;
   const versionLabel = either(prop('codeName'), prop('versionNumber'));
-
-  const aliasValue = ifElse(isUbuntu, ubuntuFormat, nonUbuntuFormat);
+  const imagesFormat = item => `${prop('distribution', item)}/${versionLabel(item)}`;
 
   return {
-    name: snakeCase(`${prop('distribution', version)} ${versionLabel(version)}`),
-    alias: aliasValue(version),
+    name: paramCase(imagesFormat(version)),
+    alias: imagesFormat(version),
   };
 });
 
