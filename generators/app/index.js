@@ -227,7 +227,7 @@ module.exports = class extends Generator {
       },
     );
 
-    this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'));
+    this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
 
     this.fs.copy(
       this.templatePath('create.yml'),
