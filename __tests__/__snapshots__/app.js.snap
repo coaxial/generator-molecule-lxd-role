@@ -189,7 +189,7 @@ exports[`generator-molecule-lxd-role:app when all the prompts have answers molec
           type: image
           mode: pull
           server: https://images.linuxcontainers.org
-          protocol: lxd
+          protocol: simplestreams
           alias: \\"{{ item.alias }}/amd64\\"
         profiles: [\\"default\\"]
         wait_for_ipv4_addresses: true
