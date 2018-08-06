@@ -291,5 +291,7 @@ module.exports = class extends Generator {
     if (p.useTravis) {
       this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
     }
+
+    this.fs.copy(this.templatePath('.yamllint'), this.destinationPath('.yamllint'));
   }
 };
