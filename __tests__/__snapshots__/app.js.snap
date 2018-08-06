@@ -91,6 +91,20 @@ pip install molecule
 "
 `;
 
+exports[`generator-molecule-lxd-role:app when all the prompts have answers .yamllint is correctly formatted 1`] = `
+"extends: default
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  line-length: disable
+"
+`;
+
 exports[`generator-molecule-lxd-role:app when all the prompts have answers README.md is correctly formatted 1`] = `
 "Test role
 =========
