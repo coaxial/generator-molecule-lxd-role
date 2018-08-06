@@ -282,6 +282,7 @@ module.exports = class extends Generator {
         platforms: p.supportedPlatforms,
         roleDeps: parseDeps(p.roleDeps),
         roleDesc: p.roleDesc,
+        roleName: paramCase(p.roleName),
         targetVersions: p.targetVersions,
       },
     );

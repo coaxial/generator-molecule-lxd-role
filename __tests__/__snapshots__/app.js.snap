@@ -176,6 +176,7 @@ galaxy_info:
   author: Test author
   description: This is a test description for the role.
   company: Test organization
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -387,6 +388,7 @@ galaxy_info:
   author: Test author
   description: This is a test description for the role.
   company: Test organization
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -410,6 +412,7 @@ galaxy_info:
   author: Test author
   description: This is a test description for the role.
   company: Test organization
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -474,6 +477,7 @@ galaxy_info:
   author: Test author
   description: This is a test description for the role.
   company: Test organization
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -546,6 +550,7 @@ exports[`generator-molecule-lxd-role:app when there is no organization meta/main
 galaxy_info:
   author: Test author
   description: This is a test description for the role.
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -618,6 +623,7 @@ exports[`generator-molecule-lxd-role:app when there is no organization or websit
 galaxy_info:
   author: Test author
   description: This is a test description for the role.
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
@@ -692,6 +698,7 @@ galaxy_info:
   author: Test author
   description: This is a test description for the role.
   company: Test organization
+  role_name: test-role
   license: MIT
   min_ansible_version: 2.4
   platforms:
