@@ -7,7 +7,7 @@ configuration to test it using
 It will run the Molecule tests using LXD containers instead of Docker
 containers.
 
-## Why LXD instead of Docker
+## Why LXD instead of Docker?
 
 LXD containers run a full system including an init system out of the box and
 are extremely close to the actual metal or VM hosts usually targetted by
@@ -33,7 +33,7 @@ Then generate your new project:
 yo molecule-lxd-role
 ```
 
-## What will the folder structure look like
+## Folder structure after running the generator
 
 ```
 .
@@ -60,15 +60,18 @@ yo molecule-lxd-role
 ├── .travis
 │   └── setup.sh
 ├── .travis.yml
-└── vars
-    └── main.yml
+├── vars
+│   └── main.yml
+└── .yamllint
 
-11 directories, 14 files
+11 directories, 15 files
 ```
 
-## Issues
+## Questions, Issues, and patches
 
-Open an issue on this repo. Questions are welcome too.
+Open an issue on this repo, and a PR to match if you can.
+
+Questions are welcome as issues too.
 
 ## Getting To Know Yeoman
 
