@@ -1,10 +1,18 @@
----
 language: node_js
 node_js:
-  - v10
-  - v8
+- v10
+- v8
 jobs:
   include:
-    - stage: Code coverage
-      node_js: node
-      script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - stage: Code coverage
+    node_js: node
+    script: jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      && rm -rf ./coverage
+deploy:
+  provider: npm
+  email: c@64b.it
+  api_key:
+    secure: qykv6BdrmCMmaXB4PjJEneWX62b8Oj08Bd77dhMbWOLKmutYR+LoiCQdGU/MZX+upQgcamCZP2F/ZZg5bsghd2CdeaWhbenD14MCz5KuvazFEf0Q3rkDdP/0faggtqDsJSRdyrLvcJvAgQjqjH06XW6x129rJ3Apruu3Q5uSQI4QaOTAZL/d/pCuJNKQcEE6wdyKv9Qy3Q1CwNuoQpkp4dr5zgm4mHWDQ+1i+N7vdhUTuEPl5HF1rXm/TChbhMsm0YFOl9GlsC0Mp1zZpX4Yz+qOoe1I2ZqDNJ6D51XWebJ0d0D/NRTcs2sV0i/eY/S3LG4i3IwX+zElA23td1Jrhf8pIuGlpEyi3/abGvh4moJxTXkpK9pMGy7XDlT7MA7w/kYJiIJfeDocKzVqMkAtpiQZWbqId+fPFIg4wkpS6jm4J/ixC0V3rpONnksuli2y2cTEb0fv/6NB1XrSa6XvpXDakKMLf0bz7wRMPUlDrzabU5Pw01fUx0B7GkjCFDFEyaYXCCIU4ransJBc6rwKxsApTVw2sRANtr7ep636ygYZPTQqU/W4mKjZUoac3XVj6kDxl3N2wNLpcrebrud2sKOmYH32PDFUoeTIhzHZ1PYY8O4rjBojjUaCf5DKIVQlMSOZyWfg6qL7IY2+QZQwyZNPOx8jTzXjQE3hmV1APSw=
+  on:
+    tags: true
+    repo: coaxial/generator-molecule-lxd-role
