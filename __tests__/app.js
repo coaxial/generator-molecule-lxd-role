@@ -73,76 +73,6 @@ describe('generator-molecule-lxd-role:app', () => {
       });
     });
 
-    describe('molecule/create.yml', () => {
-      const filePath = 'molecule/create.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/destroy.yml', () => {
-      const filePath = 'molecule/destroy.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/tests/test_default.py', () => {
-      const filePath = 'molecule/default/tests/test_default.py';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
     describe('.gitignore', () => {
       const filePath = '.gitignore';
 
@@ -402,43 +332,6 @@ describe('generator-molecule-lxd-role:app', () => {
     describe('meta/main.yml', () => {
       it('formats the metadata properly', () => {
         const actual = readFileSync('meta/main.yml', 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-  });
-
-  describe('when targetting another distribution than Ubuntu', () => {
-    const clonedResponses = clone(defaultResponses);
-    clonedResponses.targetDistributions = ['DEBIAN'];
-    clonedResponses.targetVersions = [
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'jessie',
-        versionNumber: '8',
-        tags: ['current'],
-      },
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'stretch',
-        versionNumber: '9',
-        tags: ['lts'],
-      },
-    ];
-
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, '../generators/app'))
-        .withPrompts(clonedResponses);
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('formats the platform list properly', () => {
-        const actual = readFileSync(filePath, 'utf8');
 
         expect(actual).toMatchSnapshot();
       });

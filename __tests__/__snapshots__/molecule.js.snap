@@ -1,0 +1,157 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .gitignore is correctly formatted 1`] = `
+"*.pyc
+*.log
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .yamllint is correctly formatted 1`] = `
+"extends: default
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  line-length: disable
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/create.yml is correctly formatted 1`] = `
+"---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: \\"{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}\\"
+  tasks:
+    - name: Create molecule instance(s)
+      lxd_container:
+        name: \\"{{ item.name }}\\"
+        state: started
+        source:
+          type: image
+          mode: pull
+          server: https://images.linuxcontainers.org
+          protocol: simplestreams
+          alias: \\"{{ item.alias }}/amd64\\"
+        profiles: [\\"default\\"]
+        wait_for_ipv4_addresses: true
+        timeout: 600
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+
+    - name: Install Python in container
+      delegate_to: \\"{{ item.name }}\\"
+      raw: apt-get install -y python
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/default/molecule.yml is correctly formatted 1`] = `
+"---
+dependency:
+  name: galaxy
+driver:
+  name: lxd
+lint:
+  name: yamllint
+platforms:
+  - name: ubuntu-trusty
+    alias: ubuntu/trusty
+  - name: ubuntu-xenial
+    alias: ubuntu/xenial
+  - name: ubuntu-bionic
+    alias: ubuntu/bionic
+
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../create.yml
+    destroy: ../destroy.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/default/playbook.yml is correctly formatted 1`] = `
+"---
+- name: Converge
+  hosts: all
+  roles:
+    - name: ansible-role-test-role
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/default/tests/test_default.py is correctly formatted 1`] = `
+"import os
+
+import testinfra.utils.ansible_runner
+
+testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
+    os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
+
+
+def test_example(host):
+    file = host.file('/etc/hosts')
+
+    assert file.exists
+    assert file.user == 'root'
+    assert file.group == 'root'
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/destroy.yml is correctly formatted 1`] = `
+"---
+- name: Destroy
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: \\"{{ not lookup('env', 'MOLECULE_DEBUG') | bool }}\\"
+  tasks:
+    - name: Destroy molecule instance(s)
+      lxd_container:
+        name: \\"{{ item.name }}\\"
+        state: absent
+        force_stop: \\"{{ item.force_stop | default(true) }}\\"
+      with_items: \\"{{ molecule_yml.platforms }}\\"
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when targetting another distribution than Ubuntu molecule/default/molecule.yml formats the platform list properly 1`] = `
+"---
+dependency:
+  name: galaxy
+driver:
+  name: lxd
+lint:
+  name: yamllint
+platforms:
+  - name: debian-jessie
+    alias: debian/jessie
+  - name: debian-stretch
+    alias: debian/stretch
+
+provisioner:
+  name: ansible
+  playbooks:
+    create: ../create.yml
+    destroy: ../destroy.yml
+  lint:
+    name: ansible-lint
+scenario:
+  name: default
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+"
+`;

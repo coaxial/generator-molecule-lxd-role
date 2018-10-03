@@ -11,7 +11,6 @@ const {
   toUpper,
 } = require('ramda');
 const { paramCase } = require('change-case');
-const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const mkdirp = require('mkdirp');
@@ -19,13 +18,7 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 
 const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
-const {
-  indentYaml,
-  listPlatforms,
-  listVersions,
-  moleculePlatforms,
-  parseDeps,
-} = require('../helpers');
+const { indentYaml, listPlatforms, listVersions, parseDeps } = require('../helpers');
 
 module.exports = class extends Generator {
   prompting() {
@@ -195,7 +188,6 @@ module.exports = class extends Generator {
       'defaults',
       'handlers',
       'meta',
-      'molecule/default/tests',
       'tasks',
       'templates',
       'files',
@@ -228,35 +220,6 @@ module.exports = class extends Generator {
     );
 
     this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
-
-    this.fs.copy(
-      this.templatePath('create.yml'),
-      this.destinationPath('molecule/create.yml'),
-    );
-
-    this.fs.copy(
-      this.templatePath('destroy.yml'),
-      this.destinationPath('molecule/destroy.yml'),
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('molecule.yml.ejs'),
-      this.destinationPath('molecule/default/molecule.yml'),
-      {
-        platforms: safeDump({ platforms: moleculePlatforms(p.targetVersions) }),
-      },
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('playbook.yml.ejs'),
-      this.destinationPath('molecule/default/playbook.yml'),
-      { repoName: p.repoName },
-    );
-
-    this.fs.copy(
-      this.templatePath('test_default.py'),
-      this.destinationPath('molecule/default/tests/test_default.py'),
-    );
 
     const mains = ['defaults', 'handlers', 'tasks', 'vars'];
     forEach(
