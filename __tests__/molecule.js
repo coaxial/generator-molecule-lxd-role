@@ -9,23 +9,8 @@ const path = require('path');
 describe('generator-molecule-lxd-role:molecule', () => {
   const subgeneratorPath = '../generators/molecule';
   const defaultResponses = {
-    roleName: 'Test role',
     repoName: 'ansible-role-test-role',
-    roleDesc: 'This is a test description for the role.',
-    hasDeps: true,
-    roleDeps:
-      '- src: https://bithub.com/username/role.git\n- name: username.myrole\n  src: https://bithub.com/username/myrole.git',
-    hasReqs: true,
-    roleReqs: 'This role makes some assumptions.',
-    license: 'MIT',
-    authorName: 'Test author',
-    authorOrganization: 'Test organization',
-    authorWebsite: 'https://example.org',
-    minAnsibleVer: '2.4',
     targetDistributions: ['UBUNTU'],
-    galaxyTags: ['test', 'system', 'linux'],
-    useTravis: true,
-    travisUsername: 'test-travis-username',
     targetVersions: [
       {
         family: 'debian',
