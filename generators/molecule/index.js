@@ -1,15 +1,5 @@
 'use strict';
-const {
-  either,
-  forEach,
-  isEmpty,
-  isNil,
-  map,
-  not,
-  prop,
-  split,
-  toUpper,
-} = require('ramda');
+const { either, forEach, isEmpty, isNil, map, not, prop, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
@@ -18,7 +8,7 @@ const mkdirp = require('mkdirp');
 
 const path = require('path');
 
-const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
+const { PLATFORMS, URLS } = require('../constants');
 const { listPlatforms, listVersions, moleculePlatforms } = require('../helpers');
 
 module.exports = class extends Generator {
@@ -30,56 +20,9 @@ module.exports = class extends Generator {
     const prompts = [
       {
         type: 'input',
-        name: 'roleName',
-        message: "What is the new role's name?",
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'input',
         name: 'repoName',
-        message: 'What directory will the role be created in?',
+        message: "What is the project's directory name?",
         default: answers => `ansible-role-${paramCase(answers.roleName)}`,
-      },
-      {
-        type: 'input',
-        name: 'authorName',
-        message: "Who is this role's author (full name or nickname)?",
-        store: true,
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'input',
-        name: 'authorOrganization',
-        message: `Which organization is this role published under? ${chalk.reset.gray.italic(
-          '(optional)',
-        )}`,
-        store: true,
-        default: '',
-      },
-      {
-        type: 'input',
-        name: 'authorWebsite',
-        message: `What is the website for the company/author of this role? ${chalk.reset.gray.italic(
-          '(optional)',
-        )}`,
-        store: true,
-        default: '',
-      },
-      {
-        type: 'input',
-        name: 'roleDesc',
-        message: `How would you describe this role's purpose in a few words? ${chalk.reset.gray.italic(
-          'Markdown supported.',
-        )}`,
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'list',
-        name: 'minAnsibleVer',
-        message: 'What is the minimal Ansible version required to run this role?',
-        choices: ANSIBLE_VERSIONS,
-        default: '2.4',
-        store: true,
       },
       {
         type: 'checkbox',
@@ -100,71 +43,6 @@ module.exports = class extends Generator {
         )}`,
         choices: answers => listVersions(prop('targetDistributions', answers)),
         store: true,
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'confirm',
-        name: 'useTravis',
-        message: 'Use Travis CI?',
-        default: true,
-        store: true,
-      },
-      {
-        when: answers => answers.useTravis,
-        type: 'input',
-        name: 'travisUsername',
-        message: 'What is your Travis CI username?',
-        store: true,
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'list',
-        name: 'license',
-        message: `Which license for this role? ${chalk.reset.gray.italic(
-          'For help choosing, see ' + URLS.LICENSE_INFO,
-        )}`,
-        choices: LICENSES,
-        default: 'MIT',
-        store: true,
-      },
-      {
-        type: 'input',
-        name: 'galaxyTags',
-        message: `Which Galaxy tags to give the role? ${chalk.reset.gray.italic(
-          '(optional; single words, comma separated)',
-        )}`,
-        filter: answer => split(', ', answer),
-        default: '',
-      },
-      {
-        type: 'confirm',
-        name: 'hasReqs',
-        message: 'Does this role have any particular requirements?',
-        default: false,
-      },
-      {
-        when: answers => answers.hasReqs,
-        type: 'editor',
-        name: 'roleReqs',
-        message: `Enter this role's requirements. ${chalk.reset.gray.italic(
-          'Usually details specific OS requirements, assumptions, etc. Markdown valid here.',
-        )}`,
-        validate: answer => not(either(isEmpty, isNil)(answer)),
-      },
-      {
-        type: 'confirm',
-        name: 'hasDeps',
-        message: 'Does this role depend on any other?',
-        default: false,
-      },
-      {
-        when: answers => answers.hasDeps,
-        type: 'editor',
-        name: 'roleDeps',
-        message:
-          'Enter the roles on which your role will depend. See ' +
-          URLS.DEPENDENCIES_FORMAT +
-          " for how to format your entries, they'll be inserted verbatim into a requirements.yml file.",
         validate: answer => not(either(isEmpty, isNil)(answer)),
       },
     ];
@@ -213,7 +91,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath('playbook.yml.ejs'),
       this.destinationPath('molecule/default/playbook.yml'),
-      { repoName: p.repoName },
+      { roleName: p.repoName },
     );
 
     this.fs.copy(
