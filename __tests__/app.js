@@ -6,9 +6,10 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
 
+const { mockGenerator, spy } = require('./__helpers__/mockGenerator');
+
 jest.mock('../generators/molecule', () => {
-  const helpers = require('yeoman-test');
-  return helpers.createDummyGenerator();
+  return mockGenerator();
 });
 
 describe('generator-molecule-lxd-role:app', () => {
@@ -59,9 +60,17 @@ describe('generator-molecule-lxd-role:app', () => {
     const clonedResponses = clone(defaultResponses);
 
     beforeAll(() => {
+      spy.mockClear();
       return helpers
         .run(path.join(__dirname, '../generators/app'))
         .withPrompts(clonedResponses);
+    });
+
+    it('uses the molecule subgenerator', () => {
+      expect(spy).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ roleName: 'Test role' }),
+      );
     });
 
     describe('README.md', () => {
@@ -214,6 +223,13 @@ describe('generator-molecule-lxd-role:app', () => {
       return helpers
         .run(path.join(__dirname, '../generators/app'))
         .withPrompts(clonedResponses);
+    });
+
+    it('uses the molecule subgenerator', () => {
+      expect(spy).toHaveBeenCalledWith(
+        [],
+        expect.objectContaining({ roleName: 'Test role' }),
+      );
     });
 
     describe('README.md', () => {
