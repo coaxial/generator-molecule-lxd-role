@@ -78,8 +78,8 @@ module.exports = class extends Generator {
     );
 
     // When testing a playbook, the converge playbook is the playbook under
-    // but when testing a role, a default converge playbook running the role is
-    // needed
+    // test but when testing a role, a default converge playbook running the
+    // role is needed
     if (this.options.mode === 'role') {
       this.fs.copyTpl(
         this.templatePath('playbook.yml.ejs'),

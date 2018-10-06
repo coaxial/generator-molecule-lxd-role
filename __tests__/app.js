@@ -41,6 +41,20 @@ describe('generator-molecule-lxd-role:app', () => {
       },
       {
         family: 'debian',
+        distribution: 'debian',
+        codeName: 'stretch',
+        versionNumber: '9',
+        tags: ['lts'],
+      },
+      {
+        family: 'debian',
+        distribution: 'debian',
+        codeName: 'jessie',
+        versionNumber: '8',
+        tags: ['current'],
+      },
+      {
+        family: 'debian',
         distribution: 'ubuntu',
         codeName: 'xenial',
         versionNumber: '16.04',

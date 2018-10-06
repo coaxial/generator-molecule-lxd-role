@@ -154,3 +154,23 @@ Array [
   },
 ]
 `;
+
+exports[`helpers #platformsToMetaMain formats the list correctly 1`] = `
+Array [
+  Object {
+    "name": "ubuntu",
+    "versions": Array [
+      "trusty",
+      "xenial",
+      "bionic",
+    ],
+  },
+  Object {
+    "name": "debian",
+    "versions": Array [
+      "jessie",
+      "stretch",
+    ],
+  },
+]
+`;

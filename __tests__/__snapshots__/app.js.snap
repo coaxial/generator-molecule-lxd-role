@@ -188,6 +188,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
@@ -264,6 +269,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
@@ -288,6 +298,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags: []
 
   dependencies:
@@ -353,6 +368,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
@@ -426,6 +446,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
@@ -499,6 +524,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
@@ -574,6 +604,11 @@ galaxy_info:
         - trusty
         - xenial
         - bionic
+    - name: debian
+      versions:
+        - stretch
+        - jessie
+
   galaxy_tags:
     - test
     - system
