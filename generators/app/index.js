@@ -21,10 +21,8 @@ module.exports = class extends Generator {
   }
 
   default() {
-    const p = this.props;
-
     this.composeWith(require.resolve('../molecule'), {
-      roleName: p.roleName,
+      mode: 'role',
     });
   }
 

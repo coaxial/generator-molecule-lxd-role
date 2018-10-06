@@ -67,10 +67,7 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     it('uses the molecule subgenerator', () => {
-      expect(spy).toHaveBeenCalledWith(
-        [],
-        expect.objectContaining({ roleName: 'Test role' }),
-      );
+      expect(spy).toHaveBeenCalledWith([], expect.objectContaining({ mode: 'role' }));
     });
 
     describe('README.md', () => {
@@ -226,10 +223,7 @@ describe('generator-molecule-lxd-role:app', () => {
     });
 
     it('uses the molecule subgenerator', () => {
-      expect(spy).toHaveBeenCalledWith(
-        [],
-        expect.objectContaining({ roleName: 'Test role' }),
-      );
+      expect(spy).toHaveBeenCalledWith([], expect.objectContaining({ mode: 'role' }));
     });
 
     describe('README.md', () => {
