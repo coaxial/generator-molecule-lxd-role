@@ -9,13 +9,7 @@ galaxy_info:
   license: <%- license %>
   min_ansible_version: <%- minAnsibleVer %>
   platforms:
-<% targetVersions.forEach((v, index) => { -%>
-<% if(index === 0) { -%>
-    - name: <%- v.distribution %>
-      versions:
-<% } -%>
-        - <%- v.codeName %>
-<% }) -%>
+<%- targetVersions %>
 <%- galaxyTags %>
 <% if(hasDeps) { -%>
   dependencies:

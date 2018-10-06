@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp');
 
 const path = require('path');
 
-const { indentYaml, parseDeps } = require('../helpers');
+const { indentYaml, parseDeps, platformsToMetaMain } = require('../helpers');
 const prompts = require('./prompts');
 
 module.exports = class extends Generator {
@@ -95,11 +95,10 @@ module.exports = class extends Generator {
         hasDeps: p.hasDeps,
         license: p.license,
         minAnsibleVer: p.minAnsibleVer,
-        platforms: p.supportedPlatforms,
         roleDeps: parseDeps(p.roleDeps),
         roleDesc: p.roleDesc,
         roleName: paramCase(p.roleName),
-        targetVersions: p.targetVersions,
+        targetVersions: indentYaml(4, platformsToMetaMain(p.targetVersions)),
       },
     );
 

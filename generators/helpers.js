@@ -1,10 +1,12 @@
 'use strict';
 const { Separator } = require('inquirer');
 const {
+  append,
   compose,
   concat,
   curry,
   either,
+  findIndex,
   head,
   insert,
   isEmpty,
@@ -15,6 +17,8 @@ const {
   map,
   pipe,
   prop,
+  propEq,
+  reduce,
   repeat,
   replace,
   tail,
@@ -125,6 +129,24 @@ const indentYaml = curry((count, yaml) =>
   )(yaml),
 );
 
+const platformsToMetaMain = platforms =>
+  reduce(
+    (acc, p) => {
+      const index = findIndex(propEq('name', p.distribution), acc);
+
+      if (index >= 0) {
+        // Acc already knows of that distro, we add codeName to the existing list
+        acc[index].versions = append(p.codeName, acc[index].versions);
+      } else {
+        // Create the version and add the codeName
+        acc = append({ name: p.distribution, versions: [p.codeName] }, acc);
+      }
+      return acc;
+    },
+    [],
+    platforms,
+  );
+
 module.exports = {
   listPlatforms,
   capitalize,
@@ -133,4 +155,5 @@ module.exports = {
   moleculePlatforms,
   indent,
   indentYaml,
+  platformsToMetaMain,
 };

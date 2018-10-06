@@ -1,8 +1,9 @@
 'use strict';
+const { safeDump } = require('js-yaml');
+
 const assert = require('yeoman-assert');
 
 const { PLATFORMS } = require('../generators/constants');
-const { safeDump } = require('js-yaml');
 const {
   capitalize,
   indent,
@@ -10,6 +11,7 @@ const {
   listVersions,
   moleculePlatforms,
   parseDeps,
+  platformsToMetaMain,
 } = require('../generators/helpers');
 
 describe('helpers', () => {
@@ -26,6 +28,52 @@ describe('helpers', () => {
       const yaml = safeDump({ heyo: [] });
 
       const actual = indent(2, yaml);
+
+      expect(actual).toMatchSnapshot();
+    });
+  });
+
+  describe('#platformsToMetaMain', () => {
+    it('formats the list correctly', () => {
+      const versions = [
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'trusty',
+          versionNumber: '14.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'xenial',
+          versionNumber: '16.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'ubuntu',
+          codeName: 'bionic',
+          versionNumber: '18.04',
+          tags: ['lts', 'current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'debian',
+          codeName: 'jessie',
+          versionNumber: '8',
+          tags: ['current'],
+        },
+        {
+          family: 'debian',
+          distribution: 'debian',
+          codeName: 'stretch',
+          versionNumber: '9',
+          tags: ['lts'],
+        },
+      ];
+
+      const actual = platformsToMetaMain(versions);
 
       expect(actual).toMatchSnapshot();
     });
