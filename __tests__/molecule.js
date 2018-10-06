@@ -179,4 +179,68 @@ describe('generator-molecule-lxd-role:molecule', () => {
       });
     });
   });
+
+  describe('when generating for a role', () => {
+    const clonedResponses = clone(defaultResponses);
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, subgeneratorPath))
+        .withOptions({ mode: 'role' })
+        .withPrompts(clonedResponses);
+    });
+
+    describe('molecule/default/molecule.yml', () => {
+      const filePath = 'molecule/default/molecule.yml';
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('molecule/default/playbook.yml', () => {
+      const filePath = 'molecule/default/playbook.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+  });
+
+  describe('when generating for a playbook', () => {
+    const clonedResponses = clone(defaultResponses);
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, subgeneratorPath))
+        .withOptions({ mode: 'playbook' })
+        .withPrompts(clonedResponses);
+    });
+
+    describe('molecule/default/molecule.yml', () => {
+      const filePath = 'molecule/default/molecule.yml';
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('molecule/default/playbook.yml', () => {
+      const filePath = 'molecule/default/playbook.yml';
+
+      it('does not exist', () => {
+        assert.noFile(filePath);
+      });
+    });
+  });
 });

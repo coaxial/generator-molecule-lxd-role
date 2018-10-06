@@ -12,6 +12,26 @@ const { PLATFORMS, URLS } = require('../constants');
 const { listPlatforms, listVersions, moleculePlatforms } = require('../helpers');
 
 module.exports = class extends Generator {
+  constructor(args, opts) {
+    super(args, opts);
+
+    this.option('mode', {
+      type: String,
+      required: false,
+      default: 'role',
+      desc:
+        'Whether to generate molecule files for a role or for a playbook. Acceptable values are "role" or "playbook".',
+    });
+
+    this.option('convergePath', {
+      type: String,
+      required: false,
+      default: '../../playbook.yml',
+      desc:
+        'Path to the playbook to test, relative to <repo root>/molecule/default/. Defaults to "../../playbook.yml", i.e. "<repo root>/playbook.yml".',
+    });
+  }
+
   prompting() {
     this.log(
       'This generator will create an Ansible role and test it with Molecule using LXD containers.',
@@ -85,14 +105,21 @@ module.exports = class extends Generator {
       this.destinationPath('molecule/default/molecule.yml'),
       {
         platforms: safeDump({ platforms: moleculePlatforms(p.targetVersions) }),
+        playbookMode: this.options.mode === 'playbook',
+        convergePath: this.options.convergePath,
       },
     );
 
-    this.fs.copyTpl(
-      this.templatePath('playbook.yml.ejs'),
-      this.destinationPath('molecule/default/playbook.yml'),
-      { roleName: p.repoName },
-    );
+    // When testing a playbook, the converge playbook is the playbook under
+    // but when testing a role, a default converge playbook running the role is
+    // needed
+    if (this.options.mode === 'role') {
+      this.fs.copyTpl(
+        this.templatePath('playbook.yml.ejs'),
+        this.destinationPath('molecule/default/playbook.yml'),
+        { roleName: p.repoName },
+      );
+    }
 
     this.fs.copy(
       this.templatePath('test_default.py'),
