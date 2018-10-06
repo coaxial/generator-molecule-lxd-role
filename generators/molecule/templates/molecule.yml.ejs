@@ -10,6 +10,9 @@ provisioner:
   name: ansible
   playbooks:
     create: ../create.yml
+<% if (playbookMode) { -%>
+    converge: ../../playbook.yml
+<% } -%>
     destroy: ../destroy.yml
   lint:
     name: ansible-lint

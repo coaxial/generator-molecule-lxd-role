@@ -6,6 +6,12 @@ const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
 const path = require('path');
 
+const { mockGenerator, spy } = require('./__helpers__/mockGenerator');
+
+jest.mock('../generators/molecule', () => {
+  return mockGenerator();
+});
+
 describe('generator-molecule-lxd-role:app', () => {
   const defaultResponses = {
     roleName: 'Test role',
@@ -54,83 +60,18 @@ describe('generator-molecule-lxd-role:app', () => {
     const clonedResponses = clone(defaultResponses);
 
     beforeAll(() => {
+      spy.mockClear();
       return helpers
         .run(path.join(__dirname, '../generators/app'))
         .withPrompts(clonedResponses);
     });
 
+    it('uses the molecule subgenerator', () => {
+      expect(spy).toHaveBeenCalledWith([], expect.objectContaining({ mode: 'role' }));
+    });
+
     describe('README.md', () => {
       const filePath = 'README.md';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/create.yml', () => {
-      const filePath = 'molecule/create.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/destroy.yml', () => {
-      const filePath = 'molecule/destroy.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/tests/test_default.py', () => {
-      const filePath = 'molecule/default/tests/test_default.py';
 
       it('exists', () => {
         assert.file(filePath);
@@ -281,6 +222,10 @@ describe('generator-molecule-lxd-role:app', () => {
         .withPrompts(clonedResponses);
     });
 
+    it('uses the molecule subgenerator', () => {
+      expect(spy).toHaveBeenCalledWith([], expect.objectContaining({ mode: 'role' }));
+    });
+
     describe('README.md', () => {
       it('formats the author information properly', () => {
         const actual = readFileSync('README.md', 'utf8');
@@ -402,43 +347,6 @@ describe('generator-molecule-lxd-role:app', () => {
     describe('meta/main.yml', () => {
       it('formats the metadata properly', () => {
         const actual = readFileSync('meta/main.yml', 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-  });
-
-  describe('when targetting another distribution than Ubuntu', () => {
-    const clonedResponses = clone(defaultResponses);
-    clonedResponses.targetDistributions = ['DEBIAN'];
-    clonedResponses.targetVersions = [
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'jessie',
-        versionNumber: '8',
-        tags: ['current'],
-      },
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'stretch',
-        versionNumber: '9',
-        tags: ['lts'],
-      },
-    ];
-
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, '../generators/app'))
-        .withPrompts(clonedResponses);
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('formats the platform list properly', () => {
-        const actual = readFileSync(filePath, 'utf8');
 
         expect(actual).toMatchSnapshot();
       });
