@@ -43,13 +43,30 @@ module.exports = class extends Generator {
       required: false,
       desc: 'Whether to generate the required files for running molecule on travis CI.',
     });
+
+    this.option('projectName', {
+      type: String,
+      required: false,
+      desc:
+        'Full name for the project being generated. For example `My Awesome Project`. Will be used to derive default values for creating directories etc.',
+    });
+
+    this.option('targetVersions', {
+      type: Array,
+      required: false,
+      desc:
+        'An array of version objects: `{ family: "debian", distribution: "ubuntu", codeName: "trusty", versionNumber: "14.04", tags: ["lts", "current"] }`. For more details, cf. https://github.com/coaxial/generator-molecule-lxd-role/blob/master/generators/constants.js',
+    });
+
+    this.option('repoName', {
+      type: String,
+      required: false,
+      desc: 'Name for the root directory in which the project lives.',
+    });
   }
 
   prompting() {
-    this.log(
-      'This generator will create an Ansible role and test it with Molecule using LXD containers.',
-    );
-
+    const options = this.options;
     const prompts = [
       {
         type: 'list',
@@ -65,13 +82,27 @@ module.exports = class extends Generator {
         message:
           'Where is the playbook under test located (relative to <repo root>/molecule/default/)?',
         default: this.options.convergePath || '../../playbook.yml',
-        when: isNil(path.convergePath, this.options),
+        when: answers =>
+          isNil(path(['convergePath'], options)) &&
+          (options.mode === 'playbook' || answers.mode === 'playbook'),
+      },
+      {
+        type: 'input',
+        name: 'projectName',
+        message: "What is the project's name?",
+        default: this.options.projectName || 'My Project',
+        when: this.options.projectName === undefined,
       },
       {
         type: 'input',
         name: 'repoName',
-        message: "What is the project's directory name?",
-        default: answers => `ansible-role-${paramCase(answers.roleName)}`,
+        message: `What is the project's root directory name?`,
+        default: answers =>
+          options.repoName ||
+          `ansible-${options.mode || answers.mode}-${paramCase(
+            options.projectName || answers.projectName,
+          )}`,
+        when: isNil(path(['repoName'], this.options)),
       },
       {
         type: 'checkbox',
@@ -83,6 +114,7 @@ module.exports = class extends Generator {
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
         filter: map(toUpper),
+        when: isNil(path(['targetVersions'], this.options)),
       },
       {
         type: 'checkbox',
@@ -93,6 +125,8 @@ module.exports = class extends Generator {
         choices: answers => listVersions(prop('targetDistributions', answers)),
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
+        default: this.options.targetVersions,
+        when: isNil(path(['targetVersions'], this.options)),
       },
       {
         type: 'confirm',
@@ -109,6 +143,9 @@ module.exports = class extends Generator {
         useTravis: this.options.useTravis,
         mode: this.options.mode,
         convergePath: this.options.convergePath,
+        projectName: this.options.projectName,
+        targetVersions: this.options.targetVersions,
+        repoName: this.options.repoName,
         ...props,
       };
     });
@@ -130,7 +167,6 @@ module.exports = class extends Generator {
     forEach(mkdirp, dirs);
 
     // Copy files
-    // if (path(['useTravis'], p)) {
     if (useTravis) {
       mkdirp.sync('.travis');
       this.fs.copy(

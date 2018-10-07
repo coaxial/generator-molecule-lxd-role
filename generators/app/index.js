@@ -24,6 +24,9 @@ module.exports = class extends Generator {
     this.composeWith(require.resolve('../molecule'), {
       mode: 'role',
       useTravis: this.props.useTravis,
+      projectName: this.props.roleName,
+      targetVersions: this.props.targetVersions,
+      repoName: this.props.repoName,
     });
   }
 
