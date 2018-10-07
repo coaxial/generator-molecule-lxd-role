@@ -23,6 +23,7 @@ module.exports = class extends Generator {
   default() {
     this.composeWith(require.resolve('../molecule'), {
       mode: 'role',
+      useTravis: this.props.useTravis,
     });
   }
 
@@ -37,16 +38,7 @@ module.exports = class extends Generator {
       this.destinationRoot(this.destinationPath(destinationPath));
     }
     // Create the rest of the directories
-    const dirs = [
-      'defaults',
-      'handlers',
-      'meta',
-      'tasks',
-      'templates',
-      'files',
-      '.travis',
-      'vars',
-    ];
+    const dirs = ['defaults', 'handlers', 'meta', 'tasks', 'templates', 'files', 'vars'];
 
     forEach(mkdirp, dirs);
 
@@ -101,12 +93,6 @@ module.exports = class extends Generator {
         targetVersions: indentYaml(4, platformsToMetaMain(p.targetVersions)),
       },
     );
-
-    this.fs.copy(this.templatePath('setup.sh'), this.destinationPath('.travis/setup.sh'));
-
-    if (p.useTravis) {
-      this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
-    }
 
     this.fs.copy(this.templatePath('.yamllint'), this.destinationPath('.yamllint'));
   }

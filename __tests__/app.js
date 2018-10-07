@@ -182,34 +182,6 @@ describe('generator-molecule-lxd-role:app', () => {
       });
     });
 
-    describe('.travis/setup.sh', () => {
-      const filePath = '.travis/setup.sh';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
     describe('.yamllint', () => {
       const filePath = '.yamllint';
 
@@ -385,14 +357,6 @@ describe('generator-molecule-lxd-role:app', () => {
         const actual = readFileSync(filePath, 'utf8');
 
         expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('does not exist', () => {
-        assert.noFile(filePath);
       });
     });
   });

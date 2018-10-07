@@ -6,6 +6,56 @@ exports[`generator-molecule-lxd-role:molecule when all the prompts have answers 
 "
 `;
 
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .travis.yml is correctly formatted 1`] = `
+"---
+jobs:
+  include:
+    - &test
+      stage: test
+      language: python
+      python: \\"2.7\\"
+      cache: pip
+      dist: xenial
+      sudo: required
+      install:
+        - .travis/setup.sh
+      env:
+        # keep fact gathering from timing out
+        - ANSIBLE_GATHER_TIMEOUT=300
+      script:
+        # the python venv needs to be in the path for molecule to run
+        # https://unix.stackexchange.com/questions/83191/how-to-make-sudo-preserve-path
+        - sudo env \\"PATH=$PATH\\" \\"ANSIBLE_GATHER_TIMEOUT=$ANSIBLE_GATHER_TIMEOUT\\" molecule test
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .travis/setup.sh is correctly formatted 1`] = `
+"#!/bin/sh
+sudo apt-get update
+# xenial ships LXD 2 LTS, backports ships 3 LTS
+sudo apt-get upgrade -t xenial-backports -y lxd lxd-client
+
+sudo lxd --version
+# Wait for the socket to be ready
+sudo lxd waitready
+sudo lxd init --auto
+
+pip install ansible
+pip install molecule
+
+# Enable nesting without privileged containers,
+# cf. https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/
+sudo sed -i 's/^\\\\(lxd:[0-9]\\\\{1,\\\\}\\\\):.*/\\\\1:1000000000/' /etc/subuid
+sudo sed -i 's/^\\\\(root:[0-9]\\\\{1,\\\\}\\\\):.*/\\\\1:1000000000/' /etc/subuid
+sudo sed -i 's/^\\\\(lxd:[0-9]\\\\{1,\\\\}\\\\):.*/\\\\1:1000000000/' /etc/subgid
+sudo sed -i 's/^\\\\(root:[0-9]\\\\{1,\\\\}\\\\):.*/\\\\1:1000000000/' /etc/subgid
+sudo systemctl restart lxd
+"
+`;
+
 exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .yamllint is correctly formatted 1`] = `
 "extends: default
 

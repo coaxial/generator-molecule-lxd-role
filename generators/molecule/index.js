@@ -1,12 +1,25 @@
 'use strict';
-const { forEach } = require('ramda');
+const {
+  either,
+  forEach,
+  isEmpty,
+  isNil,
+  map,
+  not,
+  path,
+  prop,
+  toUpper,
+} = require('ramda');
+const { paramCase } = require('change-case');
 const { safeDump } = require('js-yaml');
 const Generator = require('yeoman-generator');
+const chalk = require('chalk');
 const mkdirp = require('mkdirp');
-const path = require('path');
 
-const { moleculePlatforms } = require('../helpers');
-const prompts = require('./prompts');
+const fsPath = require('path');
+
+const { PLATFORMS, URLS } = require('../constants');
+const { listPlatforms, listVersions, moleculePlatforms } = require('../helpers');
 
 module.exports = class extends Generator {
   constructor(args, opts) {
@@ -15,7 +28,6 @@ module.exports = class extends Generator {
     this.option('mode', {
       type: String,
       required: false,
-      default: 'role',
       desc:
         'Whether to generate molecule files for a role or for a playbook. Acceptable values are "role" or "playbook".',
     });
@@ -23,9 +35,13 @@ module.exports = class extends Generator {
     this.option('convergePath', {
       type: String,
       required: false,
-      default: '../../playbook.yml',
-      desc:
-        'Path to the playbook to test, relative to <repo root>/molecule/default/. Defaults to "../../playbook.yml", i.e. "<repo root>/playbook.yml".',
+      desc: 'Path to the playbook to test, relative to <repo root>/molecule/default/.',
+    });
+
+    this.option('useTravis', {
+      type: Boolean,
+      required: false,
+      desc: 'Whether to generate the required files for running molecule on travis CI.',
     });
   }
 
@@ -34,17 +50,76 @@ module.exports = class extends Generator {
       'This generator will create an Ansible role and test it with Molecule using LXD containers.',
     );
 
+    const prompts = [
+      {
+        type: 'list',
+        name: 'mode',
+        choices: ['playbook', 'role'],
+        message: 'What are you generating?',
+        default: this.options.mode || 'role',
+        when: isNil(path(['mode'], this.options)),
+      },
+      {
+        type: 'input',
+        name: 'convergePath',
+        message:
+          'Where is the playbook under test located (relative to <repo root>/molecule/default/)?',
+        default: this.options.convergePath || '../../playbook.yml',
+        when: isNil(path.convergePath, this.options),
+      },
+      {
+        type: 'input',
+        name: 'repoName',
+        message: "What is the project's directory name?",
+        default: answers => `ansible-role-${paramCase(answers.roleName)}`,
+      },
+      {
+        type: 'checkbox',
+        name: 'targetDistributions',
+        message: `Which distributions does this role target? ${chalk.reset.gray.italic(
+          'Is your favourite distribution missing? Let us know here: ' + URLS.ISSUES,
+        )}`,
+        choices: listPlatforms(PLATFORMS),
+        store: true,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
+        filter: map(toUpper),
+      },
+      {
+        type: 'checkbox',
+        name: 'targetVersions',
+        message: `Which versions does this role support? ${chalk.reset.gray.italic(
+          'Are the versions outdated? File an issue here: ' + URLS.ISSUES,
+        )}`,
+        choices: answers => listVersions(prop('targetDistributions', answers)),
+        store: true,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
+      },
+      {
+        type: 'confirm',
+        name: 'useTravis',
+        message: 'Use Travis CI?',
+        default: this.options.useTravis || true,
+        store: true,
+        when: isNil(path(['useTravis'], this.options)),
+      },
+    ];
+
     return this.prompt(prompts).then(props => {
-      this.props = props;
+      this.props = {
+        useTravis: this.options.useTravis,
+        mode: this.options.mode,
+        convergePath: this.options.convergePath,
+        ...props,
+      };
     });
   }
 
   writing() {
-    const p = this.props;
-    const destinationPath = p.repoName;
+    const { mode, repoName, targetVersions, useTravis, convergePath } = this.props;
+    const destinationPath = repoName;
 
     // Create role directory if it doesn't already exist and set it as the root
-    if (path.basename(this.destinationPath()) !== destinationPath) {
+    if (fsPath.basename(this.destinationPath()) !== destinationPath) {
       this.log(`Creating your new role in ${destinationPath}...`);
       mkdirp(destinationPath);
       this.destinationRoot(this.destinationPath(destinationPath));
@@ -55,6 +130,16 @@ module.exports = class extends Generator {
     forEach(mkdirp, dirs);
 
     // Copy files
+    // if (path(['useTravis'], p)) {
+    if (useTravis) {
+      mkdirp.sync('.travis');
+      this.fs.copy(
+        this.templatePath('setup.sh'),
+        this.destinationPath('.travis/setup.sh'),
+      );
+      this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
+    }
+
     this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
 
     this.fs.copy(
@@ -71,20 +156,20 @@ module.exports = class extends Generator {
       this.templatePath('molecule.yml.ejs'),
       this.destinationPath('molecule/default/molecule.yml'),
       {
-        platforms: safeDump({ platforms: moleculePlatforms(p.targetVersions) }),
-        playbookMode: this.options.mode === 'playbook',
-        convergePath: this.options.convergePath,
+        platforms: safeDump({ platforms: moleculePlatforms(targetVersions) }),
+        playbookMode: mode === 'playbook',
+        convergePath: convergePath,
       },
     );
 
     // When testing a playbook, the converge playbook is the playbook under
     // test but when testing a role, a default converge playbook running the
     // role is needed
-    if (this.options.mode === 'role') {
+    if (mode === 'role') {
       this.fs.copyTpl(
         this.templatePath('playbook.yml.ejs'),
         this.destinationPath('molecule/default/playbook.yml'),
-        { roleName: p.repoName },
+        { roleName: repoName },
       );
     }
 
