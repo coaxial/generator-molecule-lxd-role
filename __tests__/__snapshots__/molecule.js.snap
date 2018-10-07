@@ -70,6 +70,20 @@ rules:
 "
 `;
 
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers .yamllint is correctly formatted 2`] = `
+"extends: default
+
+rules:
+  braces:
+    max-spaces-inside: 1
+    level: error
+  brackets:
+    max-spaces-inside: 1
+    level: error
+  line-length: disable
+"
+`;
+
 exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/create.yml is correctly formatted 1`] = `
 "---
 - name: Create

@@ -181,20 +181,6 @@ describe('generator-molecule-lxd-role:app', () => {
         expect(actual).toMatchSnapshot();
       });
     });
-
-    describe('.yamllint', () => {
-      const filePath = '.yamllint';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
   });
 
   describe('when there is no organization or website', () => {

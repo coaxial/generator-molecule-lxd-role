@@ -96,7 +96,5 @@ module.exports = class extends Generator {
         targetVersions: indentYaml(4, platformsToMetaMain(p.targetVersions)),
       },
     );
-
-    this.fs.copy(this.templatePath('.yamllint'), this.destinationPath('.yamllint'));
   }
 };
