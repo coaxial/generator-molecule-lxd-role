@@ -1,16 +1,15 @@
 {
   "name": "generator-molecule-lxd-role",
-  "version": "0.3.1",
-  "description": "Ansible role testing with molecule using LXD containers with optional Travis CI integration",
+  "version": "0.4.0",
+  "description":
+    "Ansible role testing with molecule using LXD containers with optional Travis CI integration",
   "homepage": "",
   "author": {
     "name": "coaxial",
     "email": "hi@64b.it",
     "url": "https://64b.it"
   },
-  "files": [
-    "generators"
-  ],
+  "files": ["generators"],
   "main": "generators/index.js",
   "keywords": [
     "ansible",
@@ -49,10 +48,7 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "node_modules/",
-      "__helpers__"
-    ]
+    "testPathIgnorePatterns": ["node_modules/", "__helpers__"]
   },
   "scripts": {
     "prepublishOnly": "nsp check",
@@ -61,20 +57,11 @@
     "test": "jest"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "git add"],
+    "*.json": ["prettier --write", "git add"]
   },
   "eslintConfig": {
-    "extends": [
-      "xo",
-      "prettier"
-    ],
+    "extends": ["xo", "prettier"],
     "env": {
       "jest": true,
       "node": true
@@ -89,9 +76,7 @@
         }
       ]
     },
-    "plugins": [
-      "prettier"
-    ]
+    "plugins": ["prettier"]
   },
   "repository": "coaxial/generator-molecule-lxd-role",
   "license": "MIT"
