@@ -181,48 +181,6 @@ describe('generator-molecule-lxd-role:app', () => {
         expect(actual).toMatchSnapshot();
       });
     });
-
-    describe('.travis/setup.sh', () => {
-      const filePath = '.travis/setup.sh';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.yamllint', () => {
-      const filePath = '.yamllint';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
   });
 
   describe('when there is no organization or website', () => {
@@ -385,14 +343,6 @@ describe('generator-molecule-lxd-role:app', () => {
         const actual = readFileSync(filePath, 'utf8');
 
         expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('does not exist', () => {
-        assert.noFile(filePath);
       });
     });
   });

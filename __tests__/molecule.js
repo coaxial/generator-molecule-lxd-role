@@ -35,13 +35,84 @@ describe('generator-molecule-lxd-role:molecule', () => {
       },
     ],
   };
+
+  describe('when Travis disabled', () => {
+    const clonedResponses = clone(defaultResponses);
+
+    beforeAll(() => {
+      return helpers
+        .run(path.join(__dirname, subgeneratorPath))
+        .withOptions({ useTravis: false })
+        .withPrompts(clonedResponses);
+    });
+
+    describe('.travis.yml', () => {
+      const filePath = '.travis.yml';
+
+      it('does not exist', () => {
+        assert.noFile(filePath);
+      });
+    });
+
+    describe('.travis/setup.sh', () => {
+      const filePath = '.travis/setup.sh';
+
+      it('does not exist', () => {
+        assert.noFile(filePath);
+      });
+    });
+  });
+
   describe('when all the prompts have answers', () => {
     const clonedResponses = clone(defaultResponses);
 
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, subgeneratorPath))
+        .withOptions({ useTravis: true })
         .withPrompts(clonedResponses);
+    });
+
+    describe('.yamllint', () => {
+      const filePath = '.yamllint';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('.travis/setup.sh', () => {
+      const filePath = '.travis/setup.sh';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('.travis.yml', () => {
+      const filePath = '.travis.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('molecule/create.yml', () => {
