@@ -16,8 +16,6 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const mkdirp = require('mkdirp');
 
-const fsPath = require('path');
-
 const { PLATFORMS, URLS } = require('../constants');
 const { listPlatforms, listVersions, moleculePlatforms } = require('../helpers');
 
@@ -153,14 +151,7 @@ module.exports = class extends Generator {
 
   writing() {
     const { mode, repoName, targetVersions, useTravis, convergePath } = this.props;
-    const destinationPath = repoName;
 
-    // Create role directory if it doesn't already exist and set it as the root
-    if (fsPath.basename(this.destinationPath()) !== destinationPath) {
-      this.log(`Creating your new role in ${destinationPath}...`);
-      mkdirp(destinationPath);
-      this.destinationRoot(this.destinationPath(destinationPath));
-    }
     // Create the rest of the directories
     const dirs = ['molecule/default/tests'];
 
