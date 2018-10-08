@@ -1,6 +1,6 @@
 {
   "name": "generator-molecule-lxd-role",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description":
     "Ansible role testing with molecule using LXD containers with optional Travis CI integration",
   "homepage": "",
