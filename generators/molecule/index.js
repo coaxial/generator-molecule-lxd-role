@@ -61,6 +61,15 @@ module.exports = class extends Generator {
       required: false,
       desc: 'Name for the root directory in which the project lives.',
     });
+
+    this.option('requirements', {
+      type: Array,
+      required: false,
+      desc:
+        'A list of dependencies to populate the requirements.yml file. A dependency is an object like `{ name: "my dep", src: "optional, if not from galaxy"}`; cf. ' +
+        URLS.DEPENDENCIES_FORMAT +
+        ' for more details.',
+    });
   }
 
   prompting() {
@@ -133,6 +142,22 @@ module.exports = class extends Generator {
         default: this.options.useTravis || true,
         store: true,
         when: isNil(path(['useTravis'], this.options)),
+      },
+      {
+        type: 'confirm',
+        name: 'hasRequirements',
+        message: 'Does this role depend on any other?',
+        default: false,
+        when: () => not(isNil(options.requirements)),
+      },
+      {
+        when: answers => answers.hasRequirements || isNil(options.requirements),
+        type: 'editor',
+        name: 'requirements',
+        message: `Enter the roles on which this project depends. See ${
+          URLS.DEPENDENCIES_FORMAT
+        } for how to format your entries, they'll be inserted verbatim into a requirements.yml file.`,
+        validate: answer => not(either(isEmpty, isNil)(answer)),
       },
     ];
 

@@ -129,22 +129,6 @@ const prompts = [
     )}`,
     validate: answer => not(either(isEmpty, isNil)(answer)),
   },
-  {
-    type: 'confirm',
-    name: 'hasDeps',
-    message: 'Does this role depend on any other?',
-    default: false,
-  },
-  {
-    when: answers => answers.hasDeps,
-    type: 'editor',
-    name: 'roleDeps',
-    message:
-      'Enter the roles on which your role will depend. See ' +
-      URLS.DEPENDENCIES_FORMAT +
-      " for how to format your entries, they'll be inserted verbatim into a requirements.yml file.",
-    validate: answer => not(either(isEmpty, isNil)(answer)),
-  },
 ];
 
 module.exports = prompts;
