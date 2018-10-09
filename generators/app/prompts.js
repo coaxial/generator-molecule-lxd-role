@@ -1,6 +1,7 @@
 const { either, isEmpty, isNil, map, not, prop, split, toUpper } = require('ramda');
 const { paramCase } = require('change-case');
 const chalk = require('chalk');
+const { safeLoad } = require('js-yaml');
 
 const { ANSIBLE_VERSIONS, LICENSES, PLATFORMS, URLS } = require('../constants');
 const { listPlatforms, listVersions } = require('../helpers');
@@ -128,6 +129,22 @@ const prompts = [
       'Usually details specific OS requirements, assumptions, etc. Markdown valid here.',
     )}`,
     validate: answer => not(either(isEmpty, isNil)(answer)),
+  },
+  {
+    type: 'confirm',
+    name: 'hasDeps',
+    message: 'Does this role depend on any other?',
+    default: false,
+  },
+  {
+    when: answers => answers.hasDeps,
+    type: 'editor',
+    name: 'roleDeps',
+    message: `Enter the roles on which this project depends. See ${
+      URLS.DEPENDENCIES_FORMAT
+    } for how to format your entries, they'll be inserted verbatim into a requirements.yml file.`,
+    validate: answer => not(either(isEmpty, isNil)(answer)),
+    filter: answer => safeLoad(answer),
   },
 ];
 

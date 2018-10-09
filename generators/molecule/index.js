@@ -11,7 +11,7 @@ const {
   toUpper,
 } = require('ramda');
 const { paramCase } = require('change-case');
-const { safeDump } = require('js-yaml');
+const { safeDump, safeLoad } = require('js-yaml');
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const mkdirp = require('mkdirp');
@@ -68,7 +68,7 @@ module.exports = class extends Generator {
       desc:
         'A list of dependencies to populate the requirements.yml file. A dependency is an object like `{ name: "my dep", src: "optional, if not from galaxy"}`; cf. ' +
         URLS.DEPENDENCIES_FORMAT +
-        ' for more details.',
+        " for more details. The value for that option is a JavaScript object which you can get from a YAML string using the js-yaml package's safeLoad method.",
     });
   }
 
@@ -141,14 +141,7 @@ module.exports = class extends Generator {
         message: 'Use Travis CI?',
         default: this.options.useTravis || true,
         store: true,
-        when: isNil(path(['useTravis'], this.options)),
-      },
-      {
-        type: 'confirm',
-        name: 'hasRequirements',
-        message: 'Does this role depend on any other?',
-        default: false,
-        when: () => not(isNil(options.requirements)),
+        when: isNil(this.options.useTravis),
       },
       {
         when: answers => answers.hasRequirements || isNil(options.requirements),
@@ -157,18 +150,29 @@ module.exports = class extends Generator {
         message: `Enter the roles on which this project depends. See ${
           URLS.DEPENDENCIES_FORMAT
         } for how to format your entries, they'll be inserted verbatim into a requirements.yml file.`,
+        default: this.options.requirements || [],
         validate: answer => not(either(isEmpty, isNil)(answer)),
+        filter: answer => safeLoad(answer),
       },
     ];
 
     return this.prompt(prompts).then(props => {
+      const {
+        useTravis,
+        mode,
+        convergePath,
+        projectName,
+        targetVersions,
+        repoName,
+      } = this.options;
+
       this.props = {
-        useTravis: this.options.useTravis,
-        mode: this.options.mode,
-        convergePath: this.options.convergePath,
-        projectName: this.options.projectName,
-        targetVersions: this.options.targetVersions,
-        repoName: this.options.repoName,
+        useTravis,
+        mode,
+        convergePath,
+        projectName,
+        targetVersions,
+        repoName,
         ...props,
       };
     });
@@ -185,11 +189,11 @@ module.exports = class extends Generator {
     // Copy files
     if (useTravis) {
       mkdirp.sync('.travis');
+      this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
       this.fs.copy(
         this.templatePath('setup.sh'),
         this.destinationPath('.travis/setup.sh'),
       );
-      this.fs.copy(this.templatePath('.travis.yml'), this.destinationPath('.travis.yml'));
     }
 
     this.fs.copy(this.templatePath('gitignore'), this.destinationPath('.gitignore'));
@@ -210,7 +214,7 @@ module.exports = class extends Generator {
       {
         platforms: safeDump({ platforms: moleculePlatforms(targetVersions) }),
         playbookMode: mode === 'playbook',
-        convergePath: convergePath,
+        convergePath,
       },
     );
 
@@ -228,6 +232,11 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath('test_default.py'),
       this.destinationPath('molecule/default/tests/test_default.py'),
+    );
+
+    const requirementsDests = ['molecule/default/requirements.yml', 'requirements.yml'];
+    requirementsDests.forEach(dest =>
+      this.fs.copy(this.templatePath('requirements.yml.ejs'), this.destinationPath(dest)),
     );
 
     this.fs.copy(this.templatePath('.yamllint'), this.destinationPath('.yamllint'));
