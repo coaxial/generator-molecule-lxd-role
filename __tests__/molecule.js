@@ -6,339 +6,343 @@ const path = require('path');
 
 describe('generator-molecule-lxd-role:molecule', () => {
   const subgeneratorPath = '../generators/molecule';
-  const defaultResponses = {
-    repoName: 'ansible-role-test-role',
-    targetDistributions: ['UBUNTU'],
-  };
-  const defaultOptions = {
-    useTravis: true,
-    targetVersions: [
-      {
-        family: 'debian',
-        distribution: 'ubuntu',
-        codeName: 'trusty',
-        versionNumber: '14.04',
-        tags: ['lts', 'current'],
-      },
-      {
-        family: 'debian',
-        distribution: 'ubuntu',
-        codeName: 'xenial',
-        versionNumber: '16.04',
-        tags: ['lts', 'current'],
-      },
-      {
-        family: 'debian',
-        distribution: 'ubuntu',
-        codeName: 'bionic',
-        versionNumber: '18.04',
-        tags: ['lts', 'current'],
-      },
-    ],
-  };
+  const modes = ['role', 'playbook'];
 
-  describe('when Travis disabled', () => {
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ ...defaultOptions, useTravis: false })
-        .withPrompts(defaultResponses);
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('does not exist', () => {
-        assert.noFile(filePath);
-      });
-    });
-
-    describe('.travis/setup.sh', () => {
-      const filePath = '.travis/setup.sh';
-
-      it('does not exist', () => {
-        assert.noFile(filePath);
-      });
-    });
-  });
-
-  describe('when all the prompts have answers', () => {
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({
-          ...defaultOptions,
-          requirements: [
-            { src: 'user/test' },
-            {
-              name: 'test',
-              src: 'https://bithub.com/user/test.git',
-            },
-          ],
-        })
-        .withPrompts(defaultResponses);
-    });
-
-    describe('requirements.yml', () => {
-      const filePath = 'requirements.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/requirements.yml', () => {
-      const filePath = 'molecule/default/requirements.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.yamllint', () => {
-      const filePath = '.yamllint';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis/setup.sh', () => {
-      const filePath = '.travis/setup.sh';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.travis.yml', () => {
-      const filePath = '.travis.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/create.yml', () => {
-      const filePath = 'molecule/create.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/destroy.yml', () => {
-      const filePath = 'molecule/destroy.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/tests/test_default.py', () => {
-      const filePath = 'molecule/default/tests/test_default.py';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.yamllint', () => {
-      const filePath = '.yamllint';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('.gitignore', () => {
-      const filePath = '.gitignore';
-
-      it('exists', () => {
-        assert.file(filePath);
-      });
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-  });
-
-  describe('when targetting another distribution than Ubuntu', () => {
-    beforeAll(() => {
-      return helpers.run(path.join(__dirname, subgeneratorPath)).withPrompts({
-        ...defaultResponses,
+  modes.forEach(mode => {
+    describe(`when generating a ${mode}`, () => {
+      const defaultResponses = {};
+      const defaultOptions = {
+        repoName: 'test-role',
+        projectName: 'Test project name',
+        targetDistributions: ['UBUNTU'],
+        mode,
+        useTravis: true,
         targetVersions: [
           {
             family: 'debian',
-            distribution: 'debian',
-            codeName: 'jessie',
-            versionNumber: '8',
-            tags: ['current'],
+            distribution: 'ubuntu',
+            codeName: 'trusty',
+            versionNumber: '14.04',
+            tags: ['lts', 'current'],
           },
           {
             family: 'debian',
-            distribution: 'debian',
-            codeName: 'stretch',
-            versionNumber: '9',
-            tags: ['lts'],
+            distribution: 'ubuntu',
+            codeName: 'xenial',
+            versionNumber: '16.04',
+            tags: ['lts', 'current'],
+          },
+          {
+            family: 'debian',
+            distribution: 'ubuntu',
+            codeName: 'bionic',
+            versionNumber: '18.04',
+            tags: ['lts', 'current'],
           },
         ],
-        targetDistributions: ['DEBIAN'],
-      });
-    });
+      };
 
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
+      describe('when Travis disabled', () => {
+        beforeAll(() => {
+          return helpers
+            .run(path.join(__dirname, subgeneratorPath))
+            .withOptions({ ...defaultOptions, useTravis: false })
+            .withPrompts(defaultResponses);
+        });
 
-      it('formats the platform list properly', () => {
-        const actual = readFileSync(filePath, 'utf8');
+        describe('.travis.yml', () => {
+          const filePath = '.travis.yml';
 
-        expect(actual).toMatchSnapshot();
-      });
-    });
-  });
+          it('does not exist', () => {
+            assert.noFile(filePath);
+          });
+        });
 
-  describe('when generating for a role', () => {
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ ...defaultOptions, mode: 'role' })
-        .withPrompts(defaultResponses);
-    });
+        describe('.travis/setup.sh', () => {
+          const filePath = '.travis/setup.sh';
 
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
-
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
-
-        expect(actual).toMatchSnapshot();
-      });
-    });
-
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
-
-      it('exists', () => {
-        assert.file(filePath);
+          it('does not exist', () => {
+            assert.noFile(filePath);
+          });
+        });
       });
 
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
+      describe('when all the prompts have answers', () => {
+        beforeAll(() => {
+          return helpers
+            .run(path.join(__dirname, subgeneratorPath))
+            .withOptions({
+              ...defaultOptions,
+              requirements: [
+                { src: 'user/test' },
+                {
+                  name: 'test',
+                  src: 'https://bithub.com/user/test.git',
+                },
+              ],
+            })
+            .withPrompts(defaultResponses);
+        });
 
-        expect(actual).toMatchSnapshot();
+        if (mode === 'playbook') {
+          describe('requirements.yml', () => {
+            const filePath = 'requirements.yml';
+
+            it('exists', () => {
+              assert.file(filePath);
+            });
+
+            it('is correctly formatted', () => {
+              const actual = readFileSync(filePath, 'utf8');
+
+              expect(actual).toMatchSnapshot();
+            });
+          });
+        }
+
+        if (mode === 'role') {
+          describe('requirements.yml', () => {
+            const filePath = 'requirements.yml';
+
+            it('does not exists', () => {
+              assert.noFile(filePath);
+            });
+          });
+        }
+
+        describe('molecule/default/requirements.yml', () => {
+          const filePath = 'molecule/default/requirements.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('.yamllint', () => {
+          const filePath = '.yamllint';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('.travis/setup.sh', () => {
+          const filePath = '.travis/setup.sh';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('.travis.yml', () => {
+          const filePath = '.travis.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/create.yml', () => {
+          const filePath = 'molecule/create.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/destroy.yml', () => {
+          const filePath = 'molecule/destroy.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/default/molecule.yml', () => {
+          const filePath = 'molecule/default/molecule.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/default/playbook.yml', () => {
+          const filePath = 'molecule/default/playbook.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/default/tests/test_default.py', () => {
+          const filePath = 'molecule/default/tests/test_default.py';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('.yamllint', () => {
+          const filePath = '.yamllint';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('.gitignore', () => {
+          const filePath = '.gitignore';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
       });
-    });
-  });
 
-  describe('when generating for a playbook', () => {
-    beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ ...defaultOptions, mode: 'playbook' })
-        .withPrompts(defaultResponses);
-    });
+      describe('when targetting another distribution than Ubuntu', () => {
+        beforeAll(() => {
+          return helpers
+            .run(path.join(__dirname, subgeneratorPath))
+            .withOptions({
+              ...defaultOptions,
+              targetVersions: [
+                {
+                  family: 'debian',
+                  distribution: 'debian',
+                  codeName: 'jessie',
+                  versionNumber: '8',
+                  tags: ['current'],
+                },
+                {
+                  family: 'debian',
+                  distribution: 'debian',
+                  codeName: 'stretch',
+                  versionNumber: '9',
+                  tags: ['lts'],
+                },
+              ],
+              targetDistributions: ['DEBIAN'],
+            })
+            .withPrompts({
+              ...defaultResponses,
+            });
+        });
 
-    describe('molecule/default/molecule.yml', () => {
-      const filePath = 'molecule/default/molecule.yml';
+        if (mode === 'playbook') {
+          describe('requirements.yml', () => {
+            const filePath = 'requirements.yml';
 
-      it('is correctly formatted', () => {
-        const actual = readFileSync(filePath, 'utf8');
+            it('exists', () => {
+              assert.file(filePath);
+            });
 
-        expect(actual).toMatchSnapshot();
-      });
-    });
+            it('is correctly formatted', () => {
+              const actual = readFileSync(filePath, 'utf8');
 
-    describe('molecule/default/playbook.yml', () => {
-      const filePath = 'molecule/default/playbook.yml';
+              expect(actual).toMatchSnapshot();
+            });
+          });
+        }
 
-      it('does not exist', () => {
-        assert.noFile(filePath);
+        if (mode === 'role') {
+          describe('requirements.yml', () => {
+            const filePath = 'requirements.yml';
+
+            it('does not exists', () => {
+              assert.noFile(filePath);
+            });
+          });
+        }
+
+        describe('molecule/default/requirements.yml', () => {
+          const filePath = 'molecule/default/requirements.yml';
+
+          it('exists', () => {
+            assert.file(filePath);
+          });
+
+          it('is correctly formatted', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
+
+        describe('molecule/default/molecule.yml', () => {
+          const filePath = 'molecule/default/molecule.yml';
+
+          it('formats the platform list properly', () => {
+            const actual = readFileSync(filePath, 'utf8');
+
+            expect(actual).toMatchSnapshot();
+          });
+        });
       });
     });
   });

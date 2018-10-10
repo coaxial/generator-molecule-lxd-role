@@ -1,5 +1,6 @@
 'use strict';
 const {
+  append,
   either,
   forEach,
   isEmpty,
@@ -236,20 +237,21 @@ module.exports = class extends Generator {
     // When testing a playbook, the converge playbook is the playbook under
     // test but when testing a role, a default converge playbook running the
     // role is needed
-    if (mode === 'role') {
-      this.fs.copyTpl(
-        this.templatePath('playbook.yml.ejs'),
-        this.destinationPath('molecule/default/playbook.yml'),
-        { roleName: repoName },
-      );
-    }
+    this.fs.copyTpl(
+      this.templatePath('playbook.yml.ejs'),
+      this.destinationPath('molecule/default/playbook.yml'),
+      { roleName: repoName },
+    );
 
     this.fs.copy(
       this.templatePath('test_default.py'),
       this.destinationPath('molecule/default/tests/test_default.py'),
     );
 
-    const requirementsDests = ['molecule/default/requirements.yml', 'requirements.yml'];
+    let requirementsDests = ['molecule/default/requirements.yml'];
+    if (mode === 'playbook') {
+      requirementsDests = append('requirements.yml', requirementsDests);
+    }
     requirementsDests.forEach(dest =>
       this.fs.copyTpl(
         this.templatePath('requirements.yml.ejs'),
