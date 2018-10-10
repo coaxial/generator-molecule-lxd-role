@@ -9,6 +9,7 @@ const {
   path,
   prop,
   toUpper,
+  type,
 } = require('ramda');
 const { paramCase } = require('change-case');
 const { safeDump, safeLoad } = require('js-yaml');
@@ -63,6 +64,8 @@ module.exports = class extends Generator {
     });
 
     this.option('requirements', {
+      // Although it is really expecting an Array, setting the type to Array
+      // wraps the supplied array in another array...
       type: Array,
       required: false,
       desc:
@@ -132,7 +135,7 @@ module.exports = class extends Generator {
         choices: answers => listVersions(prop('targetDistributions', answers)),
         store: true,
         validate: answer => not(either(isEmpty, isNil)(answer)),
-        default: this.options.targetVersions,
+        default: this.options.targetVersions || [],
         when: isNil(path(['targetVersions'], this.options)),
       },
       {
@@ -157,14 +160,18 @@ module.exports = class extends Generator {
     ];
 
     return this.prompt(prompts).then(props => {
-      const {
-        useTravis,
-        mode,
-        convergePath,
-        projectName,
-        targetVersions,
-        repoName,
-      } = this.options;
+      const { useTravis, mode, convergePath, projectName, repoName } = this.options;
+      let { requirements, targetVersions } = this.options;
+
+      // This is necessary because otherwise the array supplied as
+      // this.options.requirements will be nested inside an outer array.
+      if (type(requirements) === 'Array') {
+        requirements = requirements[0];
+      }
+      // Idem
+      if (type(targetVersions) === 'Array') {
+        targetVersions = targetVersions[0];
+      }
 
       this.props = {
         useTravis,
@@ -173,13 +180,21 @@ module.exports = class extends Generator {
         projectName,
         targetVersions,
         repoName,
+        requirements,
         ...props,
       };
     });
   }
 
   writing() {
-    const { mode, repoName, targetVersions, useTravis, convergePath } = this.props;
+    const {
+      mode,
+      repoName,
+      requirements,
+      targetVersions,
+      useTravis,
+      convergePath,
+    } = this.props;
 
     // Create the rest of the directories
     const dirs = ['molecule/default/tests'];
@@ -236,7 +251,13 @@ module.exports = class extends Generator {
 
     const requirementsDests = ['molecule/default/requirements.yml', 'requirements.yml'];
     requirementsDests.forEach(dest =>
-      this.fs.copy(this.templatePath('requirements.yml.ejs'), this.destinationPath(dest)),
+      this.fs.copyTpl(
+        this.templatePath('requirements.yml.ejs'),
+        this.destinationPath(dest),
+        {
+          requirements: safeDump(requirements),
+        },
+      ),
     );
 
     this.fs.copy(this.templatePath('.yamllint'), this.destinationPath('.yamllint'));

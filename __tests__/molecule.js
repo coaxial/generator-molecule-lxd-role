@@ -1,6 +1,4 @@
 'use strict';
-const { clone } = require('ramda');
-
 const { readFileSync } = require('fs');
 const assert = require('yeoman-assert');
 const helpers = require('yeoman-test');
@@ -11,6 +9,9 @@ describe('generator-molecule-lxd-role:molecule', () => {
   const defaultResponses = {
     repoName: 'ansible-role-test-role',
     targetDistributions: ['UBUNTU'],
+  };
+  const defaultOptions = {
+    useTravis: true,
     targetVersions: [
       {
         family: 'debian',
@@ -37,13 +38,11 @@ describe('generator-molecule-lxd-role:molecule', () => {
   };
 
   describe('when Travis disabled', () => {
-    const clonedResponses = clone(defaultResponses);
-
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ useTravis: false })
-        .withPrompts(clonedResponses);
+        .withOptions({ ...defaultOptions, useTravis: false })
+        .withPrompts(defaultResponses);
     });
 
     describe('.travis.yml', () => {
@@ -64,13 +63,48 @@ describe('generator-molecule-lxd-role:molecule', () => {
   });
 
   describe('when all the prompts have answers', () => {
-    const clonedResponses = clone(defaultResponses);
-
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ useTravis: true })
-        .withPrompts(clonedResponses);
+        .withOptions({
+          ...defaultOptions,
+          requirements: [
+            { src: 'user/test' },
+            {
+              name: 'test',
+              src: 'https://bithub.com/user/test.git',
+            },
+          ],
+        })
+        .withPrompts(defaultResponses);
+    });
+
+    describe('requirements.yml', () => {
+      const filePath = 'requirements.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
+    });
+
+    describe('molecule/default/requirements.yml', () => {
+      const filePath = 'molecule/default/requirements.yml';
+
+      it('exists', () => {
+        assert.file(filePath);
+      });
+
+      it('is correctly formatted', () => {
+        const actual = readFileSync(filePath, 'utf8');
+
+        expect(actual).toMatchSnapshot();
+      });
     });
 
     describe('.yamllint', () => {
@@ -215,29 +249,27 @@ describe('generator-molecule-lxd-role:molecule', () => {
   });
 
   describe('when targetting another distribution than Ubuntu', () => {
-    const clonedResponses = clone(defaultResponses);
-    clonedResponses.targetDistributions = ['DEBIAN'];
-    clonedResponses.targetVersions = [
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'jessie',
-        versionNumber: '8',
-        tags: ['current'],
-      },
-      {
-        family: 'debian',
-        distribution: 'debian',
-        codeName: 'stretch',
-        versionNumber: '9',
-        tags: ['lts'],
-      },
-    ];
-
     beforeAll(() => {
-      return helpers
-        .run(path.join(__dirname, subgeneratorPath))
-        .withPrompts(clonedResponses);
+      return helpers.run(path.join(__dirname, subgeneratorPath)).withPrompts({
+        ...defaultResponses,
+        targetVersions: [
+          {
+            family: 'debian',
+            distribution: 'debian',
+            codeName: 'jessie',
+            versionNumber: '8',
+            tags: ['current'],
+          },
+          {
+            family: 'debian',
+            distribution: 'debian',
+            codeName: 'stretch',
+            versionNumber: '9',
+            tags: ['lts'],
+          },
+        ],
+        targetDistributions: ['DEBIAN'],
+      });
     });
 
     describe('molecule/default/molecule.yml', () => {
@@ -252,13 +284,11 @@ describe('generator-molecule-lxd-role:molecule', () => {
   });
 
   describe('when generating for a role', () => {
-    const clonedResponses = clone(defaultResponses);
-
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ mode: 'role' })
-        .withPrompts(clonedResponses);
+        .withOptions({ ...defaultOptions, mode: 'role' })
+        .withPrompts(defaultResponses);
     });
 
     describe('molecule/default/molecule.yml', () => {
@@ -287,13 +317,11 @@ describe('generator-molecule-lxd-role:molecule', () => {
   });
 
   describe('when generating for a playbook', () => {
-    const clonedResponses = clone(defaultResponses);
-
     beforeAll(() => {
       return helpers
         .run(path.join(__dirname, subgeneratorPath))
-        .withOptions({ mode: 'playbook' })
-        .withPrompts(clonedResponses);
+        .withOptions({ ...defaultOptions, mode: 'playbook' })
+        .withPrompts(defaultResponses);
     });
 
     describe('molecule/default/molecule.yml', () => {

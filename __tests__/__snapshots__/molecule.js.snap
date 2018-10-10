@@ -155,6 +155,13 @@ exports[`generator-molecule-lxd-role:molecule when all the prompts have answers 
 "
 `;
 
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/default/requirements.yml is correctly formatted 1`] = `
+"- src: user/test
+- name: test
+  src: 'https://bithub.com/user/test.git'
+"
+`;
+
 exports[`generator-molecule-lxd-role:molecule when all the prompts have answers molecule/default/tests/test_default.py is correctly formatted 1`] = `
 "import os
 
@@ -187,6 +194,13 @@ exports[`generator-molecule-lxd-role:molecule when all the prompts have answers 
         state: absent
         force_stop: \\"{{ item.force_stop | default(true) }}\\"
       with_items: \\"{{ molecule_yml.platforms }}\\"
+"
+`;
+
+exports[`generator-molecule-lxd-role:molecule when all the prompts have answers requirements.yml is correctly formatted 1`] = `
+"- src: user/test
+- name: test
+  src: 'https://bithub.com/user/test.git'
 "
 `;
 
